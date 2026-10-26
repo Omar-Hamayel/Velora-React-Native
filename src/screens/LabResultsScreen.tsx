@@ -1,15 +1,8 @@
+import { translate, i18n, medicalNumber } from "../localization/core";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "../components/LocalizedText";
 import { Ionicons } from "@expo/vector-icons";
 import ErrorBanner from "../components/ErrorBanner";
 import LabeledInput from "../components/LabeledInput";
@@ -87,7 +80,7 @@ function recordToForm(record: LabResultRecord): FormState {
 }
 
 function formToPayload(form: FormState): LabResultRequest {
-  const num = (s: string) => (s.trim() === "" ? undefined : Number(s));
+  const num = (s: string) => (s.trim() === "" ? undefined : medicalNumber(s));
   return {
     hbA1c: num(form.hbA1c),
     fastingGlucose: num(form.fastingGlucose),
@@ -136,7 +129,7 @@ export default function LabResultsScreen({
     getLabResults()
       .then((list) => setRecords([...list].reverse()))
       .catch((err) => {
-        setErrorMessage(err instanceof ApiError ? err.message : "Couldn't load lab results.");
+        setErrorMessage(err instanceof ApiError ? err.message : translate("screens.LabResults.couldnTLoadLabResults"));
       })
       .finally(() => setIsLoading(false));
   };
@@ -177,7 +170,7 @@ export default function LabResultsScreen({
       setEditingId(null);
       loadRecords();
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't save this lab result.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.LabResults.couldnTSaveThisLabResult"));
     } finally {
       setIsSaving(false);
     }
@@ -193,7 +186,7 @@ export default function LabResultsScreen({
       setConfirmingDelete(false);
       loadRecords();
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't delete this lab result.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.LabResults.couldnTDeleteThisLabResult"));
     } finally {
       setIsDeleting(false);
     }
@@ -207,13 +200,13 @@ export default function LabResultsScreen({
           <TouchableOpacity
             activeOpacity={0.7}
             hitSlop={8}
-            onPress={(e) => onBack?.({ x: e.nativeEvent.pageX, y: e.nativeEvent.pageY })}
+            accessibilityRole="button" accessibilityLabel={translate("common.back")} onPress={(e) => onBack?.({ x: e.nativeEvent.pageX, y: e.nativeEvent.pageY })}
             style={styles.backButton}
           >
-            <Ionicons name="arrow-back" size={20} color={COLORS.black} />
+            <Ionicons name={i18n.language === "ar" ? "arrow-forward" : "arrow-back"} size={20} color={COLORS.black} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Lab Results</Text>
-          <TouchableOpacity activeOpacity={0.85} hitSlop={8} onPress={startAdd} style={styles.addButton}>
+          <Text style={styles.headerTitle}>{translate("screens.LabResults.labResults")}</Text>
+          <TouchableOpacity activeOpacity={0.85} hitSlop={8} accessibilityRole="button" accessibilityLabel={translate("screens.LabResults.addLabResult")} onPress={startAdd} style={styles.addButton}>
             <Ionicons name="add" size={22} color={COLORS.white} />
           </TouchableOpacity>
         </View>
@@ -233,19 +226,19 @@ export default function LabResultsScreen({
           {editingId !== null && (
             <View style={styles.card}>
               <Text style={styles.cardTitle}>
-                {editingId === "new" ? "Add Lab Result" : "Edit Lab Result"}
+                {editingId === "new" ? translate("screens.LabResults.addLabResult") : translate("screens.LabResults.editLabResult")}
               </Text>
-              <LabeledInput label="HbA1c (%)" value={form.hbA1c} onChangeText={(v) => setForm((f) => ({ ...f, hbA1c: v }))} keyboardType="numeric" placeholder="e.g. 5.6" />
-              <LabeledInput label="Fasting Glucose (mg/dL)" value={form.fastingGlucose} onChangeText={(v) => setForm((f) => ({ ...f, fastingGlucose: v }))} keyboardType="numeric" placeholder="e.g. 95" />
-              <LabeledInput label="Random Glucose (mg/dL)" value={form.randomGlucose} onChangeText={(v) => setForm((f) => ({ ...f, randomGlucose: v }))} keyboardType="numeric" placeholder="e.g. 110" />
-              <LabeledInput label="OGTT (mg/dL)" value={form.ogtt} onChangeText={(v) => setForm((f) => ({ ...f, ogtt: v }))} keyboardType="numeric" placeholder="e.g. 140" />
-              <LabeledInput label="Total Cholesterol (mg/dL)" value={form.totalCholesterol} onChangeText={(v) => setForm((f) => ({ ...f, totalCholesterol: v }))} keyboardType="numeric" placeholder="e.g. 180" />
-              <LabeledInput label="LDL (mg/dL)" value={form.ldl} onChangeText={(v) => setForm((f) => ({ ...f, ldl: v }))} keyboardType="numeric" placeholder="e.g. 100" />
-              <LabeledInput label="HDL (mg/dL)" value={form.hdl} onChangeText={(v) => setForm((f) => ({ ...f, hdl: v }))} keyboardType="numeric" placeholder="e.g. 50" />
-              <LabeledInput label="Triglycerides (mg/dL)" value={form.triglycerides} onChangeText={(v) => setForm((f) => ({ ...f, triglycerides: v }))} keyboardType="numeric" placeholder="e.g. 120" />
-              <LabeledInput label="Fasting Insulin (µIU/mL)" value={form.fastingInsulin} onChangeText={(v) => setForm((f) => ({ ...f, fastingInsulin: v }))} keyboardType="numeric" placeholder="e.g. 8.5" />
+              <LabeledInput label={translate("screens.LabResults.hba1c")} value={form.hbA1c} onChangeText={(v) => setForm((f) => ({ ...f, hbA1c: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG56")} />
+              <LabeledInput label={translate("screens.LabResults.fastingGlucoseMgDl")} value={form.fastingGlucose} onChangeText={(v) => setForm((f) => ({ ...f, fastingGlucose: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG95")} />
+              <LabeledInput label={translate("screens.LabResults.randomGlucoseMgDl")} value={form.randomGlucose} onChangeText={(v) => setForm((f) => ({ ...f, randomGlucose: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG110")} />
+              <LabeledInput label={translate("screens.LabResults.ogttMgDl")} value={form.ogtt} onChangeText={(v) => setForm((f) => ({ ...f, ogtt: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG140")} />
+              <LabeledInput label={translate("screens.LabResults.totalCholesterolMgDl")} value={form.totalCholesterol} onChangeText={(v) => setForm((f) => ({ ...f, totalCholesterol: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG180")} />
+              <LabeledInput label={translate("screens.LabResults.ldlMgDl")} value={form.ldl} onChangeText={(v) => setForm((f) => ({ ...f, ldl: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG100")} />
+              <LabeledInput label={translate("screens.LabResults.hdlMgDl")} value={form.hdl} onChangeText={(v) => setForm((f) => ({ ...f, hdl: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG50")} />
+              <LabeledInput label={translate("screens.LabResults.triglyceridesMgDl")} value={form.triglycerides} onChangeText={(v) => setForm((f) => ({ ...f, triglycerides: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG120")} />
+              <LabeledInput label={translate("screens.LabResults.fastingInsulinIuMl")} value={form.fastingInsulin} onChangeText={(v) => setForm((f) => ({ ...f, fastingInsulin: v }))} keyboardType="numeric" placeholder={translate("screens.LabResults.eG85")} />
               <DateInput
-                label="Test Date"
+                label={translate("screens.LabResults.testDate")}
                 value={form.testDate}
                 onChangeText={(v) => setForm((f) => ({ ...f, testDate: v }))}
                 invalid={!isValidOrEmptyDate(form.testDate)}
@@ -253,7 +246,7 @@ export default function LabResultsScreen({
 
               <View style={styles.formButtonRow}>
                 <TouchableOpacity activeOpacity={0.8} style={styles.cancelButton} onPress={cancelForm}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.cancelButtonText}>{translate("screens.LabResults.cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.85}
@@ -261,7 +254,7 @@ export default function LabResultsScreen({
                   onPress={save}
                   disabled={!formValid || isSaving}
                 >
-                  {isSaving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>Save</Text>}
+                  {isSaving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>{translate("screens.LabResults.save")}</Text>}
                 </TouchableOpacity>
               </View>
 
@@ -272,22 +265,20 @@ export default function LabResultsScreen({
                   onPress={() => setConfirmingDelete(true)}
                 >
                   <Ionicons name="trash-outline" size={16} color={COLORS.error} />
-                  <Text style={styles.deleteButtonText}>Delete Lab Result</Text>
+                  <Text style={styles.deleteButtonText}>{translate("screens.LabResults.deleteLabResult")}</Text>
                 </TouchableOpacity>
               )}
 
               {typeof editingId === "number" && confirmingDelete && (
                 <View style={styles.confirmDeleteWrap}>
-                  <Text style={styles.confirmDeleteText}>
-                    Delete this lab result? This can't be undone.
-                  </Text>
+                  <Text style={styles.confirmDeleteText}>{translate("screens.LabResults.deleteThisLabResultThisCanTBeUndone")}</Text>
                   <View style={styles.formButtonRow}>
                     <TouchableOpacity
                       activeOpacity={0.8}
                       style={styles.cancelButton}
                       onPress={() => setConfirmingDelete(false)}
                     >
-                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                      <Text style={styles.cancelButtonText}>{translate("screens.LabResults.cancel")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.85}
@@ -298,7 +289,7 @@ export default function LabResultsScreen({
                       {isDeleting ? (
                         <ActivityIndicator color={COLORS.white} />
                       ) : (
-                        <Text style={styles.saveButtonText}>Yes, Delete</Text>
+                        <Text style={styles.saveButtonText}>{translate("screens.LabResults.yesDelete")}</Text>
                       )}
                     </TouchableOpacity>
                   </View>
@@ -312,21 +303,21 @@ export default function LabResultsScreen({
           ) : records.length === 0 && editingId === null ? (
             <View style={styles.emptyWrap}>
               <Ionicons name="flask-outline" size={36} color={COLORS.grayLight} />
-              <Text style={styles.emptyText}>No lab results yet. Tap + to add one.</Text>
+              <Text style={styles.emptyText}>{translate("screens.LabResults.noLabResultsYetTapToAddOne")}</Text>
             </View>
           ) : (
             records.map((record) => {
               const fields: { label: string; value: number | null }[] = [
-                { label: "HbA1c", value: record.hbA1c ?? null },
-                { label: "Fasting Glucose", value: record.fastingGlucose ?? null },
-                { label: "Random Glucose", value: record.randomGlucose ?? null },
-                { label: "OGTT", value: record.ogtt ?? null },
-                { label: "Total Cholesterol", value: record.totalCholesterol ?? null },
-                { label: "LDL", value: record.ldl ?? null },
-                { label: "HDL", value: record.hdl ?? null },
-                { label: "Triglycerides", value: record.triglycerides ?? null },
-                { label: "Fasting Insulin", value: record.fastingInsulin ?? null },
-                { label: "HOMA-IR", value: record.homair ?? null },
+                { label: "screens.LabResults.hba1cedb199", value: record.hbA1c ?? null },
+                { label: "screens.LabResults.fastingGlucose", value: record.fastingGlucose ?? null },
+                { label: "screens.LabResults.randomGlucose", value: record.randomGlucose ?? null },
+                { label: "screens.LabResults.ogtt", value: record.ogtt ?? null },
+                { label: "screens.LabResults.totalCholesterol", value: record.totalCholesterol ?? null },
+                { label: "screens.LabResults.ldl", value: record.ldl ?? null },
+                { label: "screens.LabResults.hdl", value: record.hdl ?? null },
+                { label: "screens.LabResults.triglycerides", value: record.triglycerides ?? null },
+                { label: "screens.LabResults.fastingInsulin", value: record.fastingInsulin ?? null },
+                { label: "screens.LabResults.homaIr", value: record.homair ?? null },
               ].filter((f) => f.value !== null);
 
               return (
@@ -340,14 +331,14 @@ export default function LabResultsScreen({
                     <Text style={styles.recordDate}>
                       {record.testDate && !record.testDate.startsWith("0001")
                         ? record.testDate.slice(0, 10)
-                        : "No date"}
+                        : translate("screens.LabResults.noDate")}
                     </Text>
                     <Ionicons name="pencil-outline" size={16} color={COLORS.gray} />
                   </View>
                   <View style={styles.recordFieldGrid}>
                     {fields.map((f) => (
                       <View key={f.label} style={styles.recordFieldItem}>
-                        <Text style={styles.recordFieldLabel}>{f.label}</Text>
+                        <Text style={styles.recordFieldLabel}>{translate(f.label)}</Text>
                         <Text style={styles.recordFieldValue}>{f.value}</Text>
                       </View>
                     ))}

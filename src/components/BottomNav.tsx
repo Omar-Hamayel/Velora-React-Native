@@ -1,5 +1,7 @@
+import { translate } from "../localization/core";
 import React from "react";
-import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GestureResponderEvent, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "./LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import type { ScreenPoint } from "../screens/OnboardingScreen";
@@ -19,11 +21,11 @@ const COLORS = {
 export type NavKey = "home" | "plan" | "add" | "progress" | "profile";
 
 const NAV_ITEMS: { key: NavKey; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { key: "home", label: "Home", icon: "home" },
-  { key: "plan", label: "Plan", icon: "calendar-outline" },
-  { key: "add", label: "Add", icon: "add" },
-  { key: "progress", label: "Progress", icon: "stats-chart-outline" },
-  { key: "profile", label: "Profile", icon: "person-outline" },
+  { key: "home", label: "screens.BottomNav.home", icon: "home" },
+  { key: "plan", label: "screens.BottomNav.plan", icon: "calendar-outline" },
+  { key: "add", label: "screens.BottomNav.add", icon: "add" },
+  { key: "progress", label: "screens.BottomNav.progress", icon: "stats-chart-outline" },
+  { key: "profile", label: "screens.BottomNav.profile", icon: "person-outline" },
 ];
 
 export default function BottomNav({
@@ -72,7 +74,7 @@ export default function BottomNav({
             onPress={(e) => handlePress(item.key, e)}
           >
             <Ionicons name={item.icon} size={22} color={isActive ? COLORS.teal : COLORS.grayLight} />
-            <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>{item.label}</Text>
+            <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>{translate(item.label)}</Text>
           </TouchableOpacity>
         );
       })}

@@ -4,3 +4,9 @@ dist/
 web-build/
 *.log
 .env
+
+# Local environment and generated evidence
+.env*.local
+dist/
+test-results/
+playwright-report/

@@ -1,0 +1,555 @@
+{
+  "screens": {
+    "BloodPressure": {
+      "couldnTLoadBloodPressureReadings": "تعذر تحميل قراءات ضغط الدم.",
+      "couldnTSaveThisReading": "تعذر حفظ هذه القراءة.",
+      "couldnTDeleteThisReading": "تعذر حذف هذه القراءة.",
+      "bloodPressure": "ضغط الدم",
+      "addReading": "إضافة قراءة",
+      "editReading": "تعديل القراءة",
+      "systolicMmhg": "الضغط الانقباضي (mmHg)",
+      "eG120": "مثال: 120",
+      "diastolicMmhg": "الضغط الانبساطي (mmHg)",
+      "eG80": "مثال: 80",
+      "pulseBpm": "النبض (bpm)",
+      "eG72": "مثال: 72",
+      "dateMeasured": "تاريخ القياس",
+      "notes": "ملاحظات",
+      "eGMorningReading": "مثال: قراءة صباحية",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "deleteReading": "حذف القراءة",
+      "deleteThisReadingThisCanTBeUndone": "هل تريد حذف هذه القراءة؟ لا يمكن التراجع عن الحذف.",
+      "yesDelete": "نعم، احذف",
+      "noBloodPressureReadingsYetTapToAddOne": "لا توجد قراءات لضغط الدم بعد. اضغط + لإضافة قراءة.",
+      "mmhg": "mmHg",
+      "pulse": "النبض:",
+      "bpm": "bpm"
+    },
+    "HealthInfo": {
+      "sedentary": "خامل",
+      "light": "خفيف",
+      "moderate": "متوسط",
+      "active": "نشط",
+      "veryActive": "نشط جداً",
+      "low": "منخفض",
+      "medium": "متوسط",
+      "high": "مرتفع",
+      "diabetes": "السكري",
+      "hypertension": "ارتفاع ضغط الدم",
+      "dyslipidemia": "اضطراب دهون الدم",
+      "insulinResistance": "مقاومة الإنسولين",
+      "mother": "الأم",
+      "father": "الأب",
+      "somethingWentWrongPleaseTryAgain": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+      "pleaseGoBackAndReEnterYourBodyInfoAndLifestyleDetailsFirst": "يرجى العودة وإدخال معلومات الجسم ونمط الحياة أولاً.",
+      "tellUsAboutYourHealth": "أخبرنا عن صحتك",
+      "thisHelpsUsPersonalizeYourRecommendations": "يساعدنا ذلك على تخصيص التوصيات لك.",
+      "heightCm": "الطول (cm)",
+      "eG170": "مثال: 170",
+      "enterAHeightBetween": "أدخل طولاً بين",
+      "cm": "cm.",
+      "weightKg": "الوزن (kg)",
+      "eG68": "مثال: 68",
+      "enterAWeightBetween": "أدخل وزناً بين",
+      "kg": "kg.",
+      "waistCircumferenceCm": "محيط الخصر (cm)",
+      "eG80": "مثال: 80",
+      "enterAWaistSizeBetween": "أدخل محيط خصر بين",
+      "activityLevel": "مستوى النشاط",
+      "pleaseSelectAnActivityLevel": "يرجى اختيار مستوى النشاط.",
+      "next": "التالي",
+      "sleepHoursPerNight": "ساعات النوم في الليلة",
+      "eG75": "مثال: 7.5",
+      "enterHoursBetween": "أدخل عدد ساعات بين",
+      "stressLevel": "مستوى التوتر",
+      "pleaseSelectAStressLevel": "يرجى اختيار مستوى التوتر.",
+      "doYouSmoke": "هل تدخن؟",
+      "yes": "نعم",
+      "no": "لا",
+      "pleaseSelectAnOption": "يرجى اختيار إجابة.",
+      "waterIntakeLitersDay": "شرب الماء (لتر/يوم)",
+      "eG25": "مثال: 2.5",
+      "enterLitersBetween": "أدخل عدد لترات بين",
+      "doYouCurrentlyHaveAnyOfTheseConditions": "هل شُخّصت بأي من الحالات التالية؟",
+      "noneOfTheseApplyToMe": "لا تنطبق عليّ أي منها",
+      "hasAnyoneInYourImmediateFamilyHadTheseConditions": "هل لدى أحد أفراد عائلتك المقربين أي من هذه الحالات؟",
+      "selectAConditionAboveToAddFamilyHistoryForIt": "اختر حالة أعلاه لإضافة تاريخ عائلي لها.",
+      "noKnownFamilyHistoryOfTheseConditions": "لا يوجد تاريخ عائلي معروف لهذه الحالات",
+      "finish": "إنهاء",
+      "saving": "جارٍ الحفظ...",
+      "type2Diabetes": "السكري من النوع الثاني",
+      "hypercholesterolemia": "ارتفاع الكوليسترول"
+    },
+    "Home": {
+      "labResults": "نتائج التحاليل",
+      "bloodPressure": "ضغط الدم",
+      "medication": "الأدوية",
+      "welcomeBack": "مرحباً بعودتك 👋",
+      "todaySHealthRecommendation": "توصية اليوم",
+      "30MinuteWalkAfterLunch": "المشي لمدة 30 دقيقة بعد الغداء",
+      "recommendedBasedOnYourActivityLevelAndHealthGoals": "توصية بناءً على مستوى نشاطك وأهدافك الصحية.",
+      "reminderSet": "تم ضبط التذكير",
+      "remindMe": "ذكّرني",
+      "done": "تم",
+      "markAsDone": "تحديد كمكتمل",
+      "healthRecords": "السجلات الصحية",
+      "weeklyWellnessScore": "مؤشر العافية الأسبوعي",
+      "3GoalsCompletedThisWeek": "اكتملت 3 أهداف هذا الأسبوع",
+      "todaySPlan": "خطة اليوم"
+    },
+    "LabResults": {
+      "couldnTLoadLabResults": "تعذر تحميل نتائج التحاليل.",
+      "couldnTSaveThisLabResult": "تعذر حفظ نتيجة التحليل.",
+      "couldnTDeleteThisLabResult": "تعذر حذف نتيجة التحليل.",
+      "labResults": "نتائج التحاليل",
+      "addLabResult": "إضافة نتيجة تحليل",
+      "editLabResult": "تعديل نتيجة التحليل",
+      "hba1c": "السكر التراكمي HbA1c (%)",
+      "eG56": "مثال: 5.6",
+      "fastingGlucoseMgDl": "سكر الصيام (mg/dL)",
+      "eG95": "مثال: 95",
+      "randomGlucoseMgDl": "السكر العشوائي (mg/dL)",
+      "eG110": "مثال: 110",
+      "ogttMgDl": "اختبار تحمل الغلوكوز OGTT (mg/dL)",
+      "eG140": "مثال: 140",
+      "totalCholesterolMgDl": "الكوليسترول الكلي (mg/dL)",
+      "eG180": "مثال: 180",
+      "ldlMgDl": "كوليسترول LDL (mg/dL)",
+      "eG100": "مثال: 100",
+      "hdlMgDl": "كوليسترول HDL (mg/dL)",
+      "eG50": "مثال: 50",
+      "triglyceridesMgDl": "الدهون الثلاثية (mg/dL)",
+      "eG120": "مثال: 120",
+      "fastingInsulinIuMl": "إنسولين الصيام (µIU/mL)",
+      "eG85": "مثال: 8.5",
+      "testDate": "تاريخ التحليل",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "deleteLabResult": "حذف نتيجة التحليل",
+      "deleteThisLabResultThisCanTBeUndone": "هل تريد حذف نتيجة التحليل؟ لا يمكن التراجع عن الحذف.",
+      "yesDelete": "نعم، احذف",
+      "noLabResultsYetTapToAddOne": "لا توجد نتائج تحاليل بعد. اضغط + لإضافة نتيجة.",
+      "hba1cedb199": "السكر التراكمي HbA1c",
+      "fastingGlucose": "سكر الصيام",
+      "randomGlucose": "السكر العشوائي",
+      "ogtt": "اختبار تحمل الغلوكوز OGTT",
+      "totalCholesterol": "الكوليسترول الكلي",
+      "ldl": "كوليسترول LDL",
+      "hdl": "كوليسترول HDL",
+      "triglycerides": "الدهون الثلاثية",
+      "fastingInsulin": "إنسولين الصيام",
+      "homaIr": "HOMA-IR",
+      "noDate": "بلا تاريخ"
+    },
+    "Medication": {
+      "couldnTLoadMedications": "تعذر تحميل الأدوية.",
+      "couldnTSaveThisMedication": "تعذر حفظ الدواء.",
+      "couldnTDeleteThisMedication": "تعذر حذف الدواء.",
+      "medication": "الأدوية",
+      "addMedication": "إضافة دواء",
+      "editMedication": "تعديل الدواء",
+      "name": "الاسم",
+      "eGMetformin": "مثال: ميتفورمين",
+      "dose": "الجرعة",
+      "eG500mg": "مثال: 500mg",
+      "frequency": "التكرار",
+      "eGTwiceDaily": "مثال: مرتان يومياً",
+      "relatedCondition": "الحالة المرتبطة",
+      "eGDiabetes": "مثال: السكري",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "notes": "ملاحظات",
+      "optionalNotes": "ملاحظات اختيارية",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "deleteMedication": "حذف الدواء",
+      "deleteThisMedicationThisCanTBeUndone": "هل تريد حذف هذا الدواء؟ لا يمكن التراجع عن الحذف.",
+      "yesDelete": "نعم، احذف",
+      "noMedicationsYetTapToAddOne": "لا توجد أدوية بعد. اضغط + لإضافة دواء.",
+      "for": "لـ"
+    },
+    "Onboarding": {
+      "yourHealth": "صحتك،",
+      "guidedPersonally": "بإرشاد يناسبك",
+      "getPersonalizedLifestyleRecommendationsBasedOnYourHealthGoalsHabitsAndDailyNeeds": "احصل على توصيات لنمط الحياة تناسب صحتك وأهدافك وعاداتك واحتياجاتك اليومية.",
+      "getStarted": "ابدأ الآن"
+    },
+    "Profile": {
+      "notifications": "الإشعارات",
+      "privacySecurity": "الخصوصية والأمان",
+      "helpSupport": "المساعدة والدعم",
+      "aboutVelora": "عن VeLora",
+      "sedentary": "خامل",
+      "light": "خفيف",
+      "moderate": "متوسط",
+      "active": "نشط",
+      "veryActive": "نشط جداً",
+      "labResults": "نتائج التحاليل",
+      "bloodPressure": "ضغط الدم",
+      "medication": "الأدوية",
+      "couldnTSaveYourChanges": "تعذر حفظ التغييرات.",
+      "couldnTLoadYourHealthProfile": "تعذر تحميل ملفك الصحي.",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "gender": "الجنس",
+      "dateOfBirth": "تاريخ الميلاد",
+      "height": "الطول",
+      "weight": "الوزن",
+      "activityLevel": "مستوى النشاط",
+      "waterGoal": "هدف شرب الماء",
+      "cancel": "إلغاء",
+      "editProfile": "تعديل الملف",
+      "personalInformation": "المعلومات الشخصية",
+      "healthProfile": "الملف الصحي",
+      "heightCm": "الطول (cm)",
+      "eG170": "مثال: 170",
+      "weightKg": "الوزن (kg)",
+      "eG70": "مثال: 70",
+      "waterGoalLDay": "هدف شرب الماء (L / يوم)",
+      "eG25": "مثال: 2.5",
+      "saveChanges": "حفظ التغييرات",
+      "noHealthProfileDataYet": "لا توجد بيانات صحية بعد.",
+      "healthRecords": "السجلات الصحية",
+      "settings": "الإعدادات",
+      "logOut": "تسجيل الخروج"
+    },
+    "SignUp": {
+      "female": "أنثى",
+      "male": "ذكر",
+      "other": "آخر",
+      "alreadyExists": "موجود مسبقاً",
+      "somethingWentWrongPleaseTryAgain": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+      "emailSent": "تم إرسال البريد",
+      "weVeResentTheConfirmationLinkToYourEmail": "أعدنا إرسال رابط التأكيد إلى بريدك الإلكتروني.",
+      "createYourAccount": "إنشاء حسابك",
+      "fullName": "الاسم الكامل",
+      "enterYourFullName": "أدخل اسمك الكامل",
+      "3150CharactersLettersSpacesHyphensOrApostrophesOnly": "من 3 إلى 150 محرفاً: حروف ومسافات وشرطات أو فواصل عليا فقط.",
+      "email": "البريد الإلكتروني",
+      "enterYourEmail": "أدخل بريدك الإلكتروني",
+      "enterAValidEmailAddress": "أدخل عنوان بريد إلكتروني صحيحاً.",
+      "password": "كلمة المرور",
+      "createAPassword": "أنشئ كلمة مرور",
+      "atLeast8CharactersWithAnUppercaseLetterALowercaseLetterAndADigit": "8 محارف على الأقل، تتضمن حرفاً لاتينياً كبيراً وآخر صغيراً ورقماً.",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "reEnterYourPassword": "أعد إدخال كلمة المرور",
+      "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
+      "next": "التالي",
+      "gender": "الجنس",
+      "pleaseSelectAGender": "يرجى اختيار الجنس.",
+      "dateOfBirth": "تاريخ الميلاد",
+      "ddMmYyyy": "DD/MM/YYYY",
+      "enterAValidDateDdMmYyyyYouMustBeAtLeast13": "أدخل تاريخاً صحيحاً (DD/MM/YYYY)؛ يجب ألا يقل العمر عن 13 سنة.",
+      "createAccount": "إنشاء حساب",
+      "checkYourEmail": "تحقق من بريدك الإلكتروني",
+      "weSentAConfirmationLinkTo": "أرسلنا رابط تأكيد إلى",
+      "verifyYourEmailToActivateYourAccount": ". أكّد بريدك الإلكتروني لتفعيل حسابك.",
+      "resendConfirmationEmail": "إعادة إرسال بريد التأكيد",
+      "didnTGetItYouCanResendShortly": "لم يصلك البريد؟ يمكنك إعادة الإرسال بعد قليل.",
+      "backToLogin": "العودة لتسجيل الدخول",
+      "alreadyHaveAnAccount": "لديك حساب؟",
+      "logIn": "تسجيل الدخول",
+      "creatingYourAccount": "جارٍ إنشاء حسابك..."
+    },
+    "Welcome": {
+      "enterYourEmailAboveThenTapForgotPasswordAgain": "أدخل بريدك الإلكتروني أعلاه، ثم اضغط «نسيت كلمة المرور؟» مرة أخرى.",
+      "checkYourEmail": "تحقق من بريدك الإلكتروني",
+      "ifAnAccountExistsForThatEmailWeVeSentPasswordResetInstructions": "إذا وُجد حساب بهذا البريد، فقد أرسلنا تعليمات إعادة تعيين كلمة المرور.",
+      "somethingWentWrongPleaseTryAgain": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+      "enterYourEmailAboveThenTapResendConfirmationEmailAgain": "أدخل بريدك الإلكتروني أعلاه، ثم اضغط «إعادة إرسال بريد التأكيد» مرة أخرى.",
+      "emailSent": "تم إرسال البريد",
+      "weVeResentTheConfirmationLinkToYourEmail": "أعدنا إرسال رابط التأكيد إلى بريدك الإلكتروني.",
+      "enterYourEmailAndPasswordToContinue": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة.",
+      "pleaseConfirmYourEmailBeforeLoggingIn": "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول.",
+      "incorrectEmailOrPassword": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+      "yourHealthOurPriority": "«صحتك أولويتنا»",
+      "heyWelcomeBack": "أهلاً بعودتك!",
+      "gladToSeeYouAgain": "سعداء برؤيتك مجدداً!",
+      "emailOrPhoneNumber": "البريد الإلكتروني",
+      "enterEmailOrPhoneNumber": "أدخل البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "enterYourPassword": "أدخل كلمة المرور",
+      "resendConfirmationEmail": "إعادة إرسال بريد التأكيد",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "continue": "متابعة",
+      "orContinueWith": "أو تابع باستخدام",
+      "donTHaveAnAccount": "ليس لديك حساب؟",
+      "signUp": "إنشاء حساب",
+      "needHelp": "تحتاج مساعدة؟",
+      "loading": "جارٍ التحميل..."
+    },
+    "BottomNav": {
+      "home": "الرئيسية",
+      "plan": "الخطة",
+      "add": "إضافة",
+      "progress": "التقدم",
+      "profile": "الملف الشخصي"
+    },
+    "DateInput": {
+      "ddMmYyyy": "DD/MM/YYYY",
+      "enterAValidDateDdMmYyyy": "أدخل تاريخاً صحيحاً (DD/MM/YYYY)."
+    }
+  },
+  "common": {
+    "loading": "جارٍ التحميل…",
+    "refresh": "تحديث",
+    "retry": "حاول مجدداً",
+    "sending": "جارٍ الإرسال…",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "next": "التالي",
+    "back": "رجوع"
+  },
+  "settings": {
+    "language": "اللغة",
+    "syncFailed": "حُفظت اللغة على هذا الجهاز. تعذرت مزامنة الحساب؛ اخترها مجدداً للمحاولة.",
+    "restart": "أعد التشغيل لتطبيق اتجاه الواجهة",
+    "restartManually": "أغلق التطبيق وافتحه مجدداً لتطبيق اتجاه الواجهة."
+  },
+  "home": {
+    "todayRecommendations": "توصيات اليوم"
+  },
+  "errors": {
+    "network": "تعذر الاتصال بالخادم. تحقق من الاتصال.",
+    "session": "انتهت الجلسة. يرجى تسجيل الدخول مجدداً.",
+    "forbidden": "أكمل ملفك أو سجّل الدخول بحساب مخوّل.",
+    "notFound": "العنصر المطلوب غير متاح.",
+    "validation": "تحقق من الحقول المدخلة وحاول مجدداً.",
+    "timeout": "انتهت مهلة الطلب. يرجى المحاولة مجدداً.",
+    "unavailable": "التوصيات غير متاحة مؤقتاً. بيانات ملفك المحفوظة لم تتغير.",
+    "server": "حدث خطأ. يرجى المحاولة لاحقاً."
+  },
+  "auth": {
+    "confirmEmail": "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول.",
+    "invalidLogin": "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+  },
+  "health": {
+    "conditionUnavailable": "لا يوجد لهذه الحالة رمز مدعوم وواضح في الدليل. تواصل مع الدعم."
+  },
+  "recommendationUi": {
+    "pending": "جارٍ إعداد التوصيات.",
+    "unavailable": "حُفظ ملفك. تعذر إنشاء التوصيات؛ يمكنك المحاولة مجدداً.",
+    "empty": "لا توجد توصيات بعد. أكمل ملفك أو حدّث لاحقاً.",
+    "caution": "توخّ الحذر مع هذا النشاط؛ اختر بديلاً أخف عند الحاجة.",
+    "englishFallback": "توضيح إضافي (بالإنجليزية)"
+  },
+  "feedback": {
+    "like": "أعجبني",
+    "dislike": "لم يعجبني",
+    "complete": "تحديد كمكتمل",
+    "completed": "مكتمل"
+  },
+  "categories": {
+    "Diet": "التغذية",
+    "Exercise": "النشاط البدني",
+    "Daily Habits": "العادات اليومية",
+    "Wellness": "العافية"
+  },
+  "enums": {
+    "Male": "ذكر",
+    "Female": "أنثى",
+    "Sedentary": "خامل",
+    "LightlyActive": "نشاط خفيف",
+    "ModeratelyActive": "نشاط متوسط",
+    "VeryActive": "نشاط مرتفع",
+    "ExtraActive": "نشاط مرتفع جداً"
+  },
+  "recommendations": {
+    "diet_001": {
+      "title": "اختر فطوراً متوازناً قليل السكر",
+      "description": "جرّب الشوفان مع المكسرات والفواكه بدلاً من المعجنات الحلوة."
+    },
+    "diet_002": {
+      "title": "كوّن طبق غداء متوازناً",
+      "description": "املأ نصف الطبق بالخضروات وربعه بالبروتين وربعه بالحبوب الكاملة."
+    },
+    "diet_003": {
+      "title": "جرّب عشاءً قليل الصوديوم",
+      "description": "استخدم الأعشاب والتوابل بدلاً من إضافة الملح."
+    },
+    "diet_004": {
+      "title": "أضف دهوناً مفيدة للقلب إلى الوجبات",
+      "description": "تناول باعتدال مصادر مثل زيت الزيتون أو الأفوكادو أو المكسرات."
+    },
+    "diet_005": {
+      "title": "تناول أطعمة غنية بالألياف يومياً",
+      "description": "أضف الحبوب الكاملة والبقوليات والخضروات إلى وجباتك."
+    },
+    "diet_006": {
+      "title": "حافظ على شرب الماء خلال اليوم",
+      "description": "احتفظ بزجاجة ماء قريبة واشرب بانتظام، خاصة في الطقس الدافئ."
+    },
+    "diet_007": {
+      "title": "قلّل المشروبات السكرية",
+      "description": "استبدل المشروبات الغازية والمحلّاة بالماء أو الشاي غير المحلّى."
+    },
+    "diet_008": {
+      "title": "قلّل الوجبات الخفيفة المعبأة والمالحة",
+      "description": "اختر فاكهة طازجة أو مكسرات غير مملّحة بدلاً من رقائق البطاطا أو الوجبات المالحة."
+    },
+    "diet_009": {
+      "title": "قلّل الأطعمة المقلية",
+      "description": "جرّب الخَبز أو الشواء أو الطهي بالبخار بدلاً من القلي."
+    },
+    "diet_010": {
+      "title": "حافظ على مواعيد منتظمة للوجبات",
+      "description": "حاول تناول وجباتك في أوقات متقاربة كل يوم."
+    },
+    "exercise_001": {
+      "title": "امشِ لمدة 30 دقيقة",
+      "description": "قد يساعد المشي الخفيف بعد الوجبات على دعم أهداف النشاط اليومي."
+    },
+    "exercise_002": {
+      "title": "جرّب تمارين منزلية خفيفة",
+      "description": "قد تدعم الحركات البسيطة بوزن الجسم في المنزل أهداف النشاط دون معدات خاصة."
+    },
+    "exercise_003": {
+      "title": "مارس جلسة قصيرة من تمارين الإطالة",
+      "description": "قد تساعد تمارين الإطالة اللطيفة على تحسين المرونة وتخفيف التوتر."
+    },
+    "exercise_004": {
+      "title": "جرّب ركوب الدراجة بوتيرة معتدلة",
+      "description": "قد يدعم ركوب الدراجة بوتيرة مريحة صحة القلب والأوعية الدموية."
+    },
+    "exercise_005": {
+      "title": "جرّب تمارين القوة بوزن الجسم",
+      "description": "قد تدعم تمارين القوة البسيطة مثل القرفصاء والضغط على الحائط قوة العضلات."
+    },
+    "exercise_006": {
+      "title": "جرّب تمارين متقطعة عالية الشدة",
+      "description": "فترات قصيرة من الحركة بجهد أعلى تتبعها راحة، لمن اعتادوا النشاط المنتظم."
+    },
+    "exercise_007": {
+      "title": "مارس يوغا مسائية لطيفة",
+      "description": "قد تدعم وضعيات اليوغا الهادئة المرونة وتخفيف التوتر قبل النوم."
+    },
+    "exercise_008": {
+      "title": "ابدأ اليوم بحركات خفيفة لتحريك الجسم",
+      "description": "قد تساعدك حركات صباحية قصيرة على بدء يومك تدريجياً."
+    },
+    "exercise_009": {
+      "title": "جرّب الهرولة في الخارج",
+      "description": "قد تدعم الهرولة بوتيرة مريحة لياقة القلب والأوعية الدموية."
+    },
+    "exercise_010": {
+      "title": "امشِ قليلاً بعد الوجبات",
+      "description": "قد يساعد المشي القصير بعد الأكل على دعم توازن الطاقة خلال اليوم."
+    },
+    "habits_001": {
+      "title": "نظّم روتيناً ثابتاً للنوم",
+      "description": "حاول النوم والاستيقاظ في أوقات متقاربة كل يوم."
+    },
+    "habits_002": {
+      "title": "تابع تقدمك اليومي",
+      "description": "دوّن وجباتك أو نشاطك أو عاداتك في سجل بسيط لملاحظة الأنماط."
+    },
+    "habits_003": {
+      "title": "خطّط للوجبات مسبقاً",
+      "description": "قد يساعد التخطيط البسيط على الالتزام بوجبات متوازنة ومنتظمة."
+    },
+    "habits_004": {
+      "title": "حدّد وقتاً ثابتاً للاستيقاظ",
+      "description": "قد يساعد الاستيقاظ في وقت متقارب يومياً على دعم روتين منتظم."
+    },
+    "habits_005": {
+      "title": "قلّل استخدام الشاشات قبل النوم",
+      "description": "قد يساعد تقليل استخدام الشاشات خلال الساعة السابقة للنوم على الاسترخاء."
+    },
+    "habits_006": {
+      "title": "خذ فترات حركة منتظمة خلال اليوم",
+      "description": "قد يساعد الوقوف والتحرك قليلاً كل ساعة على دعم النشاط اليومي."
+    },
+    "habits_007": {
+      "title": "أعدّ قائمة أسبوعية لشراء الأطعمة الصحية",
+      "description": "قد يجعل إعداد قائمة المشتريات مسبقاً الخيارات الصحية أسهل."
+    },
+    "habits_008": {
+      "title": "حافظ على روتين يومي منتظم",
+      "description": "قد يساعد انتظام أوقات الوجبات والنشاط والراحة على دعم التوازن العام."
+    },
+    "habits_009": {
+      "title": "اجعل التذكير بشرب الماء عادة",
+      "description": "اضبط تذكيرات لشرب الماء بانتظام خلال اليوم."
+    },
+    "habits_010": {
+      "title": "خصّص لحظة كل مساء لمراجعة يومك",
+      "description": "قد تساعدك مراجعة قصيرة يومياً على ملاحظة ما يناسبك."
+    },
+    "wellness_001": {
+      "title": "مارس تمارين تنفّس لتخفيف التوتر",
+      "description": "قد تساعد بضع دقائق من التنفس البطيء والعميق على الشعور بالهدوء."
+    },
+    "wellness_002": {
+      "title": "جرّب جلسة قصيرة لليقظة الذهنية",
+      "description": "قد يساعد تأمل موجّه قصير على دعم هدوء الذهن."
+    },
+    "wellness_003": {
+      "title": "اقضِ وقتاً في الخارج عندما تكون الظروف مناسبة",
+      "description": "قد يساعد قضاء بعض الوقت خارجاً في طقس مناسب على دعم العافية العامة."
+    },
+    "wellness_004": {
+      "title": "تواصل بانتظام مع الأصدقاء أو العائلة",
+      "description": "قد يساعد التواصل الاجتماعي المنتظم على دعم العافية النفسية."
+    },
+    "wellness_005": {
+      "title": "دوّن أموراً تشعر بالامتنان لها",
+      "description": "قد يساعد تدوين بعض الأمور التي تشعر بالامتنان لها على دعم نظرة إيجابية."
+    },
+    "wellness_006": {
+      "title": "خذ فترات استرخاء قصيرة أثناء العمل",
+      "description": "قد تساعد بضع دقائق بعيداً عن الشاشات والمهام على استعادة الهدوء."
+    },
+    "wellness_007": {
+      "title": "استرخِ بروتين مسائي دافئ",
+      "description": "قد يساعد روتين مسائي هادئ على تهيئة الجسم للراحة."
+    },
+    "wellness_008": {
+      "title": "مارس التنفّس العميق قبل النوم",
+      "description": "قد يساعد التنفس البطيء قبل النوم على تخفيف التوتر ودعم نوم مريح."
+    },
+    "wellness_009": {
+      "title": "قلّل الكافيين في المساء",
+      "description": "قد يساعد تقليل الكافيين في وقت متأخر من اليوم على راحة أفضل."
+    },
+    "wellness_010": {
+      "title": "خصّص وقتاً لهواية تساعدك على الاسترخاء",
+      "description": "قد يساعد الانتظام في نشاط ممتع وهادئ على دعم العافية."
+    }
+  },
+  "reasonCodes": {
+    "AFTERNOON_ACTIVITY_MATCH": "يناسب نشاط فترة بعد الظهر أو شرب الماء أو توازن الوجبات.",
+    "BLOOD_SUGAR_FRIENDLY": "أُعطيت الأولوية له لأهداف نمط الحياة المرتبطة بسكر الدم.",
+    "BP_SUPPORTIVE_HABIT": "يعطي أولوية لعادة في نمط الحياة مرتبطة بأهداف ضغط الدم.",
+    "COMPLETED_RECOMMENDATION_BONUS": "أثّر إكمال توصيات سابقة في ترتيبها.",
+    "EVENING_RELAXATION_MATCH": "يناسب الاسترخاء أو النشاط الخفيف مساءً.",
+    "FIBER_PRIORITY": "يعطي أولوية للخيارات الغنية بالألياف.",
+    "HEART_HEALTHY_PRIORITY": "يعطي أولوية لخيارات مصنّفة كملائمة لصحة القلب.",
+    "LOW_ACTIVITY_INTENSITY_REDUCED": "خُفّضت أولوية النشاط الأعلى شدة عند انخفاض مستوى النشاط.",
+    "LOW_ACTIVITY_PREFERRED_CHOICE": "يعطي أولوية للنشاط اللطيف عند انخفاض مستوى النشاط.",
+    "LOW_SODIUM_PRIORITY": "يعطي أولوية للخيارات الأقل بالصوديوم.",
+    "LOW_SUGAR_PRIORITY": "يعطي أولوية للخيارات الأقل بالسكر.",
+    "MORNING_ROUTINE_MATCH": "يناسب الروتين الصباحي.",
+    "MULTI_CONDITION_INTENSITY_CAUTION": "توخّ الحذر مع النشاط الأعلى شدة عند وجود عدة حالات صحية.",
+    "MULTI_CONDITION_SAFE_CHOICE": "اجتاز فحوص القواعد الحالية للحالات المحددة.",
+    "NIGHT_SLEEP_PRIORITY": "أثّر السياق الليلي في الموازنة بين النشاط والراحة.",
+    "OUTDOOR_UNSUITABLE_INDOOR_PREFERRED": "السياق المتاح يرجّح بديلاً في مكان مغلق.",
+    "RECENT_RECOMMENDATION_PENALTY": "أدّى عرضها مؤخراً إلى خفض ترتيبها لإتاحة تنوع أكبر.",
+    "REDUCE_FRIED_FOOD": "يعطي أولوية لتقليل الأطعمة المقلية.",
+    "REGULAR_MEAL_TIMING": "يعطي أولوية لانتظام مواعيد الوجبات.",
+    "STRESS_REDUCTION_PRIORITY": "يعطي أولوية لعادات تخفيف التوتر.",
+    "WEATHER_COLD_INDOOR_ACTIVITY": "سياق الطقس البارد يرجّح النشاط في مكان مغلق.",
+    "WEATHER_GOOD_OUTDOOR_ACTIVITY": "سياق الطقس المناسب يدعم النشاط الخفيف في الخارج.",
+    "WEATHER_HOT_HYDRATION_PRIORITY": "سياق الطقس الحار يرفع أولوية شرب الماء.",
+    "WEATHER_HOT_OUTDOOR_EXERCISE_REDUCED": "سياق الطقس الحار يخفض أولوية التمارين الخارجية الأعلى شدة.",
+    "WEATHER_RAIN_INDOOR_ALTERNATIVE": "سياق الطقس الماطر يرجّح بديلاً في مكان مغلق.",
+    "BASE_PROFILE_MATCH": "يتوافق مع عوامل التصفية الأساسية للملف.",
+    "UNSAFE_FOR_HYPERCHOLESTEROLEMIA": "استُبعد وفق قواعد السلامة الحالية لإحدى الحالات المحددة.",
+    "UNSAFE_FOR_HYPERTENSION": "استُبعد وفق قواعد السلامة الحالية لإحدى الحالات المحددة.",
+    "UNSAFE_FOR_INSULIN_RESISTANCE": "استُبعد وفق قواعد السلامة الحالية لإحدى الحالات المحددة.",
+    "UNSAFE_FOR_TYPE_2_DIABETES": "استُبعد وفق قواعد السلامة الحالية لإحدى الحالات المحددة."
+  },
+  "validation": {
+    "range": "أدخل قيمة بين {{min}} و{{max}} {{unit}}."
+  }
+}

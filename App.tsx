@@ -1,3 +1,7 @@
+import { I18nextProvider, useTranslation } from "react-i18next";
+import { i18n, direction } from "./src/localization/core";
+import { initializeLocalization, synchronizeLanguage } from "./src/localization/runtime";
+import { getOnboardingStatus } from "./src/api/authApi";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Dimensions, Easing, PanResponder, StyleSheet, View } from "react-native";
 import OnboardingScreen, { ScreenPoint } from "./src/screens/OnboardingScreen";
@@ -66,7 +70,10 @@ const PREVIOUS_SCREEN: Partial<Record<Screen, Screen>> = {
 const SWIPE_DISTANCE_THRESHOLD = 80;
 const SWIPE_DIRECTION_TOLERANCE = 60;
 
-export default function App() {
+export default function App() { return <I18nextProvider i18n={i18n}><AppContent /></I18nextProvider>; }
+function AppContent() {
+  const { i18n: locale } = useTranslation();
+  const [initialized, setInitialized] = useState(false);
   const [splashMounted, setSplashMounted] = useState(true);
   const splashOpacity = useRef(new Animated.Value(1)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
@@ -79,9 +86,18 @@ export default function App() {
   // stays invisible (opacity 0) until the splash finishes regardless, so
   // there's no visible flicker between "onboarding" and "home" here.
   useEffect(() => {
-    loadPersistedSession().then((restored) => {
-      if (restored) setScreen("home");
-    });
+    void (async () => {
+      try {
+        await initializeLocalization();
+        if (await loadPersistedSession()) {
+          const status = await getOnboardingStatus();
+          setOnboardingStartStep(mapNextStepToUiStep(status.nextStep));
+          setScreen(status.requiresProfileCompletion ? "healthInfo" : "home");
+          await synchronizeLanguage().catch(() => undefined);
+        }
+      } catch { /* The existing login UI remains available on expired sessions or offline startup. */ }
+      finally { setInitialized(true); }
+    })();
   }, []);
 
   // Lab Results / Blood Pressure / Medication are reachable from both Home
@@ -187,6 +203,7 @@ export default function App() {
     requiresProfileCompletion: boolean,
     nextStep?: string | null
   ) => {
+    void synchronizeLanguage().catch(() => undefined);
     if (requiresProfileCompletion) {
       setOnboardingStartStep(mapNextStepToUiStep(nextStep));
       transitionTo("healthInfo")(origin);
@@ -204,13 +221,13 @@ export default function App() {
         onMoveShouldSetPanResponder: (_evt, gestureState) => {
           if (splashMounted || bubbleVisibleRef.current) return false;
           if (!getPreviousScreen(screenRef.current)) return false;
-          return gestureState.dx > 24 && Math.abs(gestureState.dy) < 24;
+          return gestureState.dx * (i18n.language === "ar" ? -1 : 1) > 24 && Math.abs(gestureState.dy) < 24;
         },
         onPanResponderRelease: (evt, gestureState) => {
           const previous = getPreviousScreen(screenRef.current);
           if (
             previous &&
-            gestureState.dx > SWIPE_DISTANCE_THRESHOLD &&
+            gestureState.dx * (i18n.language === "ar" ? -1 : 1) > SWIPE_DISTANCE_THRESHOLD &&
             Math.abs(gestureState.dy) < SWIPE_DIRECTION_TOLERANCE
           ) {
             transitionTo(previous)({ x: evt.nativeEvent.pageX, y: evt.nativeEvent.pageY });
@@ -220,8 +237,9 @@ export default function App() {
     [splashMounted]
   );
 
+  if (!initialized) return <View style={styles.container} />;
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
+    <View style={[styles.container, {direction: direction(locale.language)}]} {...panResponder.panHandlers}>
       <Animated.View style={[styles.layer, { opacity: contentOpacity }]}>
         {screen === "onboarding" && <OnboardingScreen onGetStarted={handleGetStarted} />}
         {screen === "welcome" && (

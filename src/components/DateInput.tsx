@@ -1,5 +1,7 @@
+import { translate, normalizeDigits } from "../localization/core";
 import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Text, TextInput } from "./LocalizedText";
 import { Ionicons } from "@expo/vector-icons";
 
 const COLORS = {
@@ -17,7 +19,7 @@ const DATE_REGEX = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 // user can never type an unpadded/ambiguous date like "2026-10-5" — typing
 // is always coerced into a complete DD/MM/YYYY shape.
 export function formatDateDigits(text: string): string {
-  const digits = text.replace(/\D/g, "").slice(0, 8);
+  const digits = normalizeDigits(text).replace(/\D/g, "").slice(0, 8);
   if (digits.length > 4) return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
   if (digits.length > 2) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
   return digits;
@@ -69,7 +71,7 @@ export default function DateInput({
       <View style={[styles.inputRow, invalid && styles.inputRowError]}>
         <TextInput
           style={styles.input}
-          placeholder="DD/MM/YYYY"
+          placeholder={translate("screens.DateInput.ddMmYyyy")}
           placeholderTextColor={COLORS.grayLight}
           keyboardType="number-pad"
           maxLength={10}
@@ -78,7 +80,7 @@ export default function DateInput({
         />
         <Ionicons name="calendar-outline" size={18} color={COLORS.gray} />
       </View>
-      {invalid && <Text style={styles.errorText}>Enter a valid date (DD/MM/YYYY).</Text>}
+      {invalid && <Text style={styles.errorText}>{translate("screens.DateInput.enterAValidDateDdMmYyyy")}</Text>}
     </View>
   );
 }

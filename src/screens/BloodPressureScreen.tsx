@@ -1,15 +1,8 @@
+import { translate, i18n, medicalNumber } from "../localization/core";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "../components/LocalizedText";
 import { Ionicons } from "@expo/vector-icons";
 import ErrorBanner from "../components/ErrorBanner";
 import LabeledInput from "../components/LabeledInput";
@@ -52,7 +45,7 @@ const DIASTOLIC_MAX = 200;
 
 function numberInRange(value: string, min: number, max: number): boolean {
   if (value.trim() === "") return false;
-  const num = Number(value);
+  const num = medicalNumber(value);
   return Number.isFinite(num) && num >= min && num <= max;
 }
 
@@ -71,9 +64,9 @@ function recordToForm(record: BloodPressureReadingRecord): FormState {
 
 function formToPayload(form: FormState): BloodPressureReadingRequest {
   return {
-    systolic: Number(form.systolic),
-    diastolic: Number(form.diastolic),
-    pulse: form.pulse.trim() === "" ? undefined : Number(form.pulse),
+    systolic: medicalNumber(form.systolic),
+    diastolic: medicalNumber(form.diastolic),
+    pulse: form.pulse.trim() === "" ? undefined : medicalNumber(form.pulse),
     measuredAt: ddmmyyyyToIso(form.measuredAt),
     notes: form.notes.trim() === "" ? undefined : form.notes.trim(),
   };
@@ -99,7 +92,7 @@ export default function BloodPressureScreen({
     getBloodPressureReadings()
       .then((list) => setRecords([...list].reverse()))
       .catch((err) => {
-        setErrorMessage(err instanceof ApiError ? err.message : "Couldn't load blood pressure readings.");
+        setErrorMessage(err instanceof ApiError ? err.message : translate("screens.BloodPressure.couldnTLoadBloodPressureReadings"));
       })
       .finally(() => setIsLoading(false));
   };
@@ -143,7 +136,7 @@ export default function BloodPressureScreen({
       setEditingId(null);
       loadRecords();
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't save this reading.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.BloodPressure.couldnTSaveThisReading"));
     } finally {
       setIsSaving(false);
     }
@@ -159,7 +152,7 @@ export default function BloodPressureScreen({
       setConfirmingDelete(false);
       loadRecords();
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't delete this reading.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.BloodPressure.couldnTDeleteThisReading"));
     } finally {
       setIsDeleting(false);
     }
@@ -173,13 +166,13 @@ export default function BloodPressureScreen({
           <TouchableOpacity
             activeOpacity={0.7}
             hitSlop={8}
-            onPress={(e) => onBack?.({ x: e.nativeEvent.pageX, y: e.nativeEvent.pageY })}
+            accessibilityRole="button" accessibilityLabel={translate("common.back")} onPress={(e) => onBack?.({ x: e.nativeEvent.pageX, y: e.nativeEvent.pageY })}
             style={styles.backButton}
           >
-            <Ionicons name="arrow-back" size={20} color={COLORS.black} />
+            <Ionicons name={i18n.language === "ar" ? "arrow-forward" : "arrow-back"} size={20} color={COLORS.black} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Blood Pressure</Text>
-          <TouchableOpacity activeOpacity={0.85} hitSlop={8} onPress={startAdd} style={styles.addButton}>
+          <Text style={styles.headerTitle}>{translate("screens.BloodPressure.bloodPressure")}</Text>
+          <TouchableOpacity activeOpacity={0.85} hitSlop={8} accessibilityRole="button" accessibilityLabel={translate("screens.BloodPressure.addReading")} onPress={startAdd} style={styles.addButton}>
             <Ionicons name="add" size={22} color={COLORS.white} />
           </TouchableOpacity>
         </View>
@@ -198,21 +191,21 @@ export default function BloodPressureScreen({
 
           {editingId !== null && (
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>{editingId === "new" ? "Add Reading" : "Edit Reading"}</Text>
-              <LabeledInput label="Systolic (mmHg)" value={form.systolic} onChangeText={(v) => setForm((f) => ({ ...f, systolic: v }))} keyboardType="numeric" placeholder="e.g. 120" />
-              <LabeledInput label="Diastolic (mmHg)" value={form.diastolic} onChangeText={(v) => setForm((f) => ({ ...f, diastolic: v }))} keyboardType="numeric" placeholder="e.g. 80" />
-              <LabeledInput label="Pulse (bpm)" value={form.pulse} onChangeText={(v) => setForm((f) => ({ ...f, pulse: v }))} keyboardType="numeric" placeholder="e.g. 72" />
+              <Text style={styles.cardTitle}>{editingId === "new" ? translate("screens.BloodPressure.addReading") : translate("screens.BloodPressure.editReading")}</Text>
+              <LabeledInput label={translate("screens.BloodPressure.systolicMmhg")} value={form.systolic} onChangeText={(v) => setForm((f) => ({ ...f, systolic: v }))} keyboardType="numeric" placeholder={translate("screens.BloodPressure.eG120")} />
+              <LabeledInput label={translate("screens.BloodPressure.diastolicMmhg")} value={form.diastolic} onChangeText={(v) => setForm((f) => ({ ...f, diastolic: v }))} keyboardType="numeric" placeholder={translate("screens.BloodPressure.eG80")} />
+              <LabeledInput label={translate("screens.BloodPressure.pulseBpm")} value={form.pulse} onChangeText={(v) => setForm((f) => ({ ...f, pulse: v }))} keyboardType="numeric" placeholder={translate("screens.BloodPressure.eG72")} />
               <DateInput
-                label="Date Measured"
+                label={translate("screens.BloodPressure.dateMeasured")}
                 value={form.measuredAt}
                 onChangeText={(v) => setForm((f) => ({ ...f, measuredAt: v }))}
                 invalid={!isValidOrEmptyDate(form.measuredAt)}
               />
-              <LabeledInput label="Notes" value={form.notes} onChangeText={(v) => setForm((f) => ({ ...f, notes: v }))} placeholder="e.g. Morning reading" />
+              <LabeledInput label={translate("screens.BloodPressure.notes")} value={form.notes} onChangeText={(v) => setForm((f) => ({ ...f, notes: v }))} placeholder={translate("screens.BloodPressure.eGMorningReading")} />
 
               <View style={styles.formButtonRow}>
                 <TouchableOpacity activeOpacity={0.8} style={styles.cancelButton} onPress={cancelForm}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.cancelButtonText}>{translate("screens.BloodPressure.cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.85}
@@ -220,7 +213,7 @@ export default function BloodPressureScreen({
                   onPress={save}
                   disabled={!formValid || isSaving}
                 >
-                  {isSaving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>Save</Text>}
+                  {isSaving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>{translate("screens.BloodPressure.save")}</Text>}
                 </TouchableOpacity>
               </View>
 
@@ -231,22 +224,20 @@ export default function BloodPressureScreen({
                   onPress={() => setConfirmingDelete(true)}
                 >
                   <Ionicons name="trash-outline" size={16} color={COLORS.error} />
-                  <Text style={styles.deleteButtonText}>Delete Reading</Text>
+                  <Text style={styles.deleteButtonText}>{translate("screens.BloodPressure.deleteReading")}</Text>
                 </TouchableOpacity>
               )}
 
               {typeof editingId === "number" && confirmingDelete && (
                 <View style={styles.confirmDeleteWrap}>
-                  <Text style={styles.confirmDeleteText}>
-                    Delete this reading? This can't be undone.
-                  </Text>
+                  <Text style={styles.confirmDeleteText}>{translate("screens.BloodPressure.deleteThisReadingThisCanTBeUndone")}</Text>
                   <View style={styles.formButtonRow}>
                     <TouchableOpacity
                       activeOpacity={0.8}
                       style={styles.cancelButton}
                       onPress={() => setConfirmingDelete(false)}
                     >
-                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                      <Text style={styles.cancelButtonText}>{translate("screens.BloodPressure.cancel")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.85}
@@ -257,7 +248,7 @@ export default function BloodPressureScreen({
                       {isDeleting ? (
                         <ActivityIndicator color={COLORS.white} />
                       ) : (
-                        <Text style={styles.saveButtonText}>Yes, Delete</Text>
+                        <Text style={styles.saveButtonText}>{translate("screens.BloodPressure.yesDelete")}</Text>
                       )}
                     </TouchableOpacity>
                   </View>
@@ -271,7 +262,7 @@ export default function BloodPressureScreen({
           ) : records.length === 0 && editingId === null ? (
             <View style={styles.emptyWrap}>
               <Ionicons name="heart-outline" size={36} color={COLORS.grayLight} />
-              <Text style={styles.emptyText}>No blood pressure readings yet. Tap + to add one.</Text>
+              <Text style={styles.emptyText}>{translate("screens.BloodPressure.noBloodPressureReadingsYetTapToAddOne")}</Text>
             </View>
           ) : (
             records.map((record) => (
@@ -283,13 +274,13 @@ export default function BloodPressureScreen({
               >
                 <View style={styles.recordCardHeader}>
                   <Text style={styles.recordReading}>
-                    {record.systolic}/{record.diastolic} <Text style={styles.recordUnit}>mmHg</Text>
+                    {record.systolic}/{record.diastolic} <Text style={styles.recordUnit}>{translate("screens.BloodPressure.mmhg")}</Text>
                   </Text>
                   <Ionicons name="pencil-outline" size={16} color={COLORS.gray} />
                 </View>
                 <View style={styles.recordMetaRow}>
                   {record.pulse != null && (
-                    <Text style={styles.recordMeta}>Pulse: {record.pulse} bpm</Text>
+                    <Text style={styles.recordMeta}>{translate("screens.BloodPressure.pulse")} {record.pulse}{translate("screens.BloodPressure.bpm")}</Text>
                   )}
                   {record.measuredAt && !record.measuredAt.startsWith("0001") && (
                     <Text style={styles.recordMeta}>{record.measuredAt.slice(0, 10)}</Text>

@@ -1,13 +1,9 @@
+import { translate, i18n } from "../localization/core";
+import RecommendationList from "../components/RecommendationList";
 import React, { useState } from "react";
 import {
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "../components/LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import BottomNav from "../components/BottomNav";
@@ -39,73 +35,6 @@ const COLORS = {
   background: "#F5F8F7",
 };
 
-type DateOption = { day: string; date: number };
-
-const DATE_OPTIONS: DateOption[] = [
-  { day: "M", date: 12 },
-  { day: "T", date: 13 },
-  { day: "W", date: 14 },
-  { day: "T", date: 15 },
-  { day: "F", date: 16 },
-  { day: "S", date: 17 },
-  { day: "S", date: 18 },
-];
-const DEFAULT_SELECTED_DATE_INDEX = 2;
-
-type PlanItem = {
-  id: string;
-  category: string;
-  title: string;
-  subtitle: string;
-  time?: string;
-  status?: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  iconBackground: string;
-  iconColor: string;
-};
-
-const DAILY_PLAN: PlanItem[] = [
-  {
-    id: "breakfast",
-    category: "Breakfast Recommendation",
-    title: "Oats with fruits and nuts",
-    subtitle: "Supports blood sugar balance",
-    time: "08:30 AM",
-    icon: "restaurant-outline",
-    iconBackground: COLORS.greenTint,
-    iconColor: COLORS.gradientEnd,
-  },
-  {
-    id: "activity",
-    category: "Activity Recommendation",
-    title: "30 min walking",
-    subtitle: "Best before sunset",
-    time: "05:00 PM",
-    icon: "walk-outline",
-    iconBackground: COLORS.tealTint,
-    iconColor: COLORS.teal,
-  },
-  {
-    id: "wellness",
-    category: "Wellness Tip",
-    title: "Reduce salty food today",
-    subtitle: "Supports blood pressure control",
-    icon: "bulb-outline",
-    iconBackground: COLORS.greenTint,
-    iconColor: COLORS.gradientEnd,
-  },
-  {
-    id: "hydration",
-    category: "Hydration Goal",
-    title: "Drink 8 cups of water",
-    subtitle: "In progress",
-    status: "In progress",
-    icon: "water-outline",
-    iconBackground: COLORS.tealTint,
-    iconColor: COLORS.teal,
-  },
-];
-
 type RecordTileKey = "labResults" | "bloodPressure" | "medication";
 
 const RECORD_TILES: {
@@ -117,21 +46,21 @@ const RECORD_TILES: {
 }[] = [
   {
     key: "labResults",
-    label: "Lab Results",
+    label: "screens.Home.labResults",
     icon: "flask-outline",
     iconBackground: COLORS.tealTint,
     iconColor: COLORS.teal,
   },
   {
     key: "bloodPressure",
-    label: "Blood Pressure",
+    label: "screens.Home.bloodPressure",
     icon: "heart-outline",
     iconBackground: COLORS.greenTint,
     iconColor: COLORS.gradientEnd,
   },
   {
     key: "medication",
-    label: "Medication",
+    label: "screens.Home.medication",
     icon: "medkit-outline",
     iconBackground: COLORS.tealTint,
     iconColor: COLORS.teal,
@@ -150,10 +79,6 @@ export default function HomeScreen({
   onGoToMedication?: (origin: ScreenPoint) => void;
 }) {
   const userName = getCurrentUser()?.fullName || "there";
-  const [selectedDateIndex, setSelectedDateIndex] = useState(DEFAULT_SELECTED_DATE_INDEX);
-  const [isRecommendationDone, setIsRecommendationDone] = useState(false);
-  const [isReminderSet, setIsReminderSet] = useState(false);
-
   return (
     <View style={styles.outer}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
@@ -175,70 +100,22 @@ export default function HomeScreen({
                   <Ionicons name="person" size={22} color={COLORS.teal} />
                 </View>
                 <View>
-                  <Text style={styles.greeting}>Welcome back 👋</Text>
+                  <Text style={styles.greeting}>{translate("screens.Home.welcomeBack")}</Text>
                   <Text style={styles.userName}>{userName}</Text>
                 </View>
               </View>
 
-              <TouchableOpacity activeOpacity={0.75} style={styles.notificationButton}>
+              <View style={styles.notificationButton}>
                 <Ionicons name="notifications-outline" size={20} color={COLORS.white} />
-                <View style={styles.notificationDot} />
-              </TouchableOpacity>
+              </View>
             </View>
           </LinearGradient>
 
           <View style={styles.body}>
-            {/* Today's Health Recommendation */}
-            <View style={[styles.card, styles.recommendationCard]}>
-              <View style={styles.recommendationIconBadge}>
-                <Ionicons name="sunny-outline" size={20} color={COLORS.white} />
-              </View>
-              <Text style={styles.cardTitle}>Today's Health Recommendation</Text>
-              <Text style={styles.recommendationHeadline}>30-minute walk after lunch</Text>
-              <Text style={styles.cardSubtitle}>
-                Recommended based on your activity level and health goals.
-              </Text>
-
-              <View style={styles.recommendationButtonRow}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={[styles.outlineButton, isReminderSet && styles.outlineButtonActive]}
-                  onPress={() => setIsReminderSet((v) => !v)}
-                >
-                  <Ionicons
-                    name={isReminderSet ? "alarm" : "alarm-outline"}
-                    size={16}
-                    color={isReminderSet ? COLORS.teal : COLORS.gray}
-                  />
-                  <Text
-                    style={[
-                      styles.outlineButtonText,
-                      isReminderSet && styles.outlineButtonTextActive,
-                    ]}
-                  >
-                    {isReminderSet ? "Reminder Set" : "Remind Me"}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  activeOpacity={0.85}
-                  style={[styles.filledButton, isRecommendationDone && styles.filledButtonDone]}
-                  onPress={() => setIsRecommendationDone((v) => !v)}
-                >
-                  <Ionicons
-                    name={isRecommendationDone ? "checkmark-done" : "checkmark"}
-                    size={16}
-                    color={COLORS.white}
-                  />
-                  <Text style={styles.filledButtonText}>
-                    {isRecommendationDone ? "Done" : "Mark as Done"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <RecommendationList />
 
             {/* Health Records */}
-            <Text style={styles.sectionTitleLeft}>Health Records</Text>
+            <Text style={styles.sectionTitleLeft}>{translate("screens.Home.healthRecords")}</Text>
             <View style={[styles.card, styles.recordsCard]}>
               {RECORD_TILES.map((tile, index) => (
                 <TouchableOpacity
@@ -258,99 +135,12 @@ export default function HomeScreen({
                   <View style={[styles.recordIconBadge, { backgroundColor: tile.iconBackground }]}>
                     <Ionicons name={tile.icon} size={18} color={tile.iconColor} />
                   </View>
-                  <Text style={styles.recordLabel}>{tile.label}</Text>
-                  <Ionicons name="chevron-forward" size={18} color={COLORS.grayLight} />
+                  <Text style={styles.recordLabel}>{translate(tile.label)}</Text>
+                  <Ionicons name={i18n.language === "ar" ? "chevron-back" : "chevron-forward"} size={18} color={COLORS.grayLight} />
                 </TouchableOpacity>
               ))}
             </View>
 
-            {/* Weekly Wellness Score */}
-            <View style={[styles.card, styles.wellnessCard]}>
-              <View style={styles.wellnessHeaderRow}>
-                <Text style={styles.cardTitle}>Weekly Wellness Score</Text>
-                <Ionicons name="trending-up-outline" size={18} color={COLORS.teal} />
-              </View>
-
-              <View style={styles.wellnessScoreRow}>
-                <Text style={styles.wellnessScoreText}>72%</Text>
-                <Text style={styles.cardSubtitle}>3 goals completed this week</Text>
-              </View>
-
-              <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, { width: "72%" }]} />
-              </View>
-            </View>
-
-            {/* Today's Plan date selector */}
-            <View style={styles.sectionHeaderRow}>
-              <TouchableOpacity activeOpacity={0.7} hitSlop={8}>
-                <Ionicons name="chevron-back" size={18} color={COLORS.gray} />
-              </TouchableOpacity>
-              <Text style={styles.sectionTitle}>Today's Plan</Text>
-              <TouchableOpacity activeOpacity={0.7} hitSlop={8}>
-                <Ionicons name="chevron-forward" size={18} color={COLORS.gray} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.dateRow}>
-              {DATE_OPTIONS.map((option, index) => {
-                const selected = index === selectedDateIndex;
-                return (
-                  <TouchableOpacity
-                    key={`${option.day}-${option.date}`}
-                    activeOpacity={0.8}
-                    style={[styles.datePill, selected && styles.datePillSelected]}
-                    onPress={() => setSelectedDateIndex(index)}
-                  >
-                    <Text style={[styles.dateDay, selected && styles.dateDaySelected]}>
-                      {option.day}
-                    </Text>
-                    <Text style={[styles.dateNumber, selected && styles.dateNumberSelected]}>
-                      {option.date}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-
-            {/* Daily plan cards */}
-            <View style={styles.planList}>
-              {DAILY_PLAN.map((item) => (
-                <TouchableOpacity
-                  key={item.id}
-                  activeOpacity={0.85}
-                  style={[styles.card, styles.planCard]}
-                >
-                  <View style={[styles.planIconBadge, { backgroundColor: item.iconBackground }]}>
-                    <Ionicons name={item.icon} size={20} color={item.iconColor} />
-                  </View>
-
-                  <View style={styles.planCardBody}>
-                    <Text style={styles.planCategory}>{item.category}</Text>
-                    <Text style={styles.planTitle}>{item.title}</Text>
-                    <View style={styles.planMetaRow}>
-                      {item.time && (
-                        <View style={styles.planTimeRow}>
-                          <Ionicons name="time-outline" size={12} color={COLORS.grayLight} />
-                          <Text style={styles.planTime}>{item.time}</Text>
-                        </View>
-                      )}
-                      <Text style={styles.planSubtitle} numberOfLines={1}>
-                        {item.subtitle}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {item.status ? (
-                    <View style={styles.statusPill}>
-                      <Text style={styles.statusPillText}>{item.status}</Text>
-                    </View>
-                  ) : (
-                    <Ionicons name="chevron-forward" size={18} color={COLORS.grayLight} />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </View>
           </View>
         </ScrollView>
 
@@ -426,7 +216,7 @@ const styles = StyleSheet.create({
   notificationDot: {
     position: "absolute",
     top: 9,
-    right: 10,
+    end: 10,
     width: 7,
     height: 7,
     borderRadius: 3.5,
@@ -464,7 +254,7 @@ const styles = StyleSheet.create({
   recommendationIconBadge: {
     position: "absolute",
     top: -16,
-    right: 18,
+    end: 18,
     width: 40,
     height: 40,
     borderRadius: 20,

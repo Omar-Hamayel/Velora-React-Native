@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, Easing, StyleSheet, Text, View } from "react-native";
+import { Animated, Easing, StyleSheet, View } from "react-native";
+import { Text } from "./LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 // Must load before expo-video: on web, expo-video's player class extends
 // globalThis.expo.SharedObject, which this import installs as a side effect.
 import "expo-modules-core";
-import { useVideoPlayer, VideoView } from "expo-video";
+import BrandVideo from "./BrandVideo";
+import { translate } from "../localization/core";
 
 const LOADING_VIDEO_SOURCE = require("../../assets/video/loading.mp4");
 const LOADING_VIDEO_SIZE = 150;
@@ -21,25 +23,13 @@ const COLORS = {
 };
 
 export default function LoadingVideoOverlay({
-  text = "Loading...",
+  text = translate("common.loading"),
 }: {
   text?: string;
 }) {
-  const player = useVideoPlayer(LOADING_VIDEO_SOURCE, (p) => {
-    p.muted = true;
-    p.loop = true;
-  });
-
   const overlayOpacity = useRef(new Animated.Value(0)).current;
   const cardScale = useRef(new Animated.Value(0.88)).current;
   const breathe = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    // On web the player has no video element to play() until VideoView below
-    // has mounted and registered with it, which happens just before this
-    // effect runs (child effects commit before parent effects).
-    player.play();
-  }, [player]);
 
   useEffect(() => {
     Animated.parallel([
@@ -95,12 +85,12 @@ export default function LoadingVideoOverlay({
         >
           <View style={styles.videoRing}>
             <View style={styles.videoMask}>
-              <VideoView
+              <BrandVideo
                 style={styles.video}
-                player={player}
+                source={LOADING_VIDEO_SOURCE} loop
                 contentFit="cover"
-                nativeControls={false}
-                allowsFullscreen={false}
+                
+                
               />
             </View>
           </View>

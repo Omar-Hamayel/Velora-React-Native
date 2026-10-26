@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "./LocalizedText";
 import { Ionicons } from "@expo/vector-icons";
 
 const COLORS = {
@@ -12,16 +13,18 @@ const COLORS = {
 export default function ErrorBanner({
   message,
   onDismiss,
+  tone = "error",
 }: {
   message: string | null;
   onDismiss?: () => void;
+  tone?: "error" | "success";
 }) {
   if (!message) return null;
 
   return (
-    <View style={styles.banner}>
-      <Ionicons name="alert-circle" size={18} color={COLORS.icon} />
-      <Text style={styles.text}>{message}</Text>
+    <View accessibilityRole="alert" style={[styles.banner, tone === "success" && styles.successBanner]}>
+      <Ionicons name={tone === "success" ? "checkmark-circle" : "alert-circle"} size={18} color={tone === "success" ? "#1E7A52" : COLORS.icon} />
+      <Text style={[styles.text, tone === "success" && styles.successText]}>{message}</Text>
       {onDismiss && (
         <TouchableOpacity onPress={onDismiss} hitSlop={8} activeOpacity={0.7}>
           <Ionicons name="close" size={16} color={COLORS.icon} />
@@ -50,5 +53,12 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     fontWeight: "600",
     color: COLORS.text,
+  },
+  successBanner: {
+    backgroundColor: "#EAF7F0",
+    borderColor: "#B6DECA",
+  },
+  successText: {
+    color: "#1E7A52",
   },
 });

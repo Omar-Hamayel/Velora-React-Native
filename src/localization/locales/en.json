@@ -1,0 +1,565 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "back": "Back",
+    "loading": "Loading…",
+    "refresh": "Refresh",
+    "retry": "Try again",
+    "sending": "Sending…"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Create account",
+    "confirmEmail": "Please confirm your email before logging in.",
+    "invalidLogin": "Incorrect email or password."
+  },
+  "home": {
+    "welcome": "Welcome",
+    "todayRecommendations": "Today's recommendations"
+  },
+  "profile": {
+    "healthProfile": "Health profile",
+    "goals": "Goals"
+  },
+  "settings": {
+    "language": "Language",
+    "english": "English",
+    "arabic": "Arabic",
+    "syncFailed": "Saved on this device. Account sync failed; select again to retry.",
+    "restart": "Restart to apply layout direction",
+    "restartManually": "Close and reopen the app to apply its layout direction."
+  },
+  "recommendations": {
+    "title": "Recommendations",
+    "diet_001": {
+      "title": "Choose a low-sugar balanced breakfast",
+      "description": "Try oats with nuts and fruit instead of sweet pastries."
+    },
+    "diet_002": {
+      "title": "Build a balanced lunch plate",
+      "description": "Fill half your plate with vegetables, a quarter with protein, and a quarter with whole grains."
+    },
+    "diet_003": {
+      "title": "Try a low-sodium dinner",
+      "description": "Season meals with herbs and spices instead of extra salt."
+    },
+    "diet_004": {
+      "title": "Add heart-healthy fats to meals",
+      "description": "Include sources like olive oil, avocado, or nuts in moderation."
+    },
+    "diet_005": {
+      "title": "Include fiber-rich foods daily",
+      "description": "Add whole grains, legumes, and vegetables to your meals."
+    },
+    "diet_006": {
+      "title": "Stay hydrated throughout the day",
+      "description": "Keep a water bottle nearby and sip water regularly, especially in warm weather."
+    },
+    "diet_007": {
+      "title": "Reduce sugary drinks",
+      "description": "Swap sodas and sweetened beverages for water or unsweetened tea."
+    },
+    "diet_008": {
+      "title": "Reduce salty packaged snacks",
+      "description": "Choose fresh fruit or unsalted nuts instead of chips or salted snacks."
+    },
+    "diet_009": {
+      "title": "Reduce fried foods",
+      "description": "Try baking, grilling, or steaming instead of frying."
+    },
+    "diet_010": {
+      "title": "Keep meal timing consistent",
+      "description": "Try to eat meals around the same times each day."
+    },
+    "exercise_001": {
+      "title": "Take a 30-minute walk",
+      "description": "A light walk after meals can support daily activity goals."
+    },
+    "exercise_002": {
+      "title": "Try a light home exercise routine",
+      "description": "Simple bodyweight movements at home can support activity goals without special equipment."
+    },
+    "exercise_003": {
+      "title": "Do a short stretching session",
+      "description": "Gentle stretches can improve flexibility and ease tension."
+    },
+    "exercise_004": {
+      "title": "Go for a moderate cycling session",
+      "description": "Cycling at a comfortable pace can support cardiovascular health."
+    },
+    "exercise_005": {
+      "title": "Try bodyweight strength training",
+      "description": "Simple strength exercises like squats and wall push-ups can support muscle tone."
+    },
+    "exercise_006": {
+      "title": "Try a high-intensity interval workout",
+      "description": "Short bursts of higher-effort movement followed by rest, for those used to regular activity."
+    },
+    "exercise_007": {
+      "title": "Practice gentle evening yoga",
+      "description": "Relaxing yoga poses can support flexibility and stress reduction before bed."
+    },
+    "exercise_008": {
+      "title": "Start the day with light mobility movement",
+      "description": "A short morning mobility routine can help you ease into the day."
+    },
+    "exercise_009": {
+      "title": "Go for an outdoor jog",
+      "description": "Jogging at a comfortable pace can support cardiovascular fitness."
+    },
+    "exercise_010": {
+      "title": "Take a short walk after meals",
+      "description": "A brief walk after eating can support balanced energy through the day."
+    },
+    "habits_001": {
+      "title": "Build a consistent sleep routine",
+      "description": "Try to go to bed and wake up at similar times each day."
+    },
+    "habits_002": {
+      "title": "Track your daily progress",
+      "description": "Note your meals, activity, or habits in a simple log to notice patterns."
+    },
+    "habits_003": {
+      "title": "Plan meals ahead of time",
+      "description": "A little planning can make consistent, balanced meals easier to keep up."
+    },
+    "habits_004": {
+      "title": "Set a consistent wake-up time",
+      "description": "Waking up around the same time daily can support a stable routine."
+    },
+    "habits_005": {
+      "title": "Limit screen time before bed",
+      "description": "Reducing screen use in the hour before sleep may help you wind down."
+    },
+    "habits_006": {
+      "title": "Take regular movement breaks during the day",
+      "description": "Standing up and moving briefly every hour can support daily activity."
+    },
+    "habits_007": {
+      "title": "Prepare a weekly grocery list of healthy foods",
+      "description": "Planning your grocery list ahead can make healthy choices easier."
+    },
+    "habits_008": {
+      "title": "Practice consistent daily routines",
+      "description": "Keeping regular times for meals, activity, and rest can support overall balance."
+    },
+    "habits_009": {
+      "title": "Keep a hydration reminder habit",
+      "description": "Set reminders to drink water regularly through the day."
+    },
+    "habits_010": {
+      "title": "Reflect briefly on your day each evening",
+      "description": "A short daily reflection can help you notice what's working well."
+    },
+    "wellness_001": {
+      "title": "Practice stress-reduction breathing exercises",
+      "description": "A few minutes of slow, deep breathing can help you feel calmer."
+    },
+    "wellness_002": {
+      "title": "Try a short mindfulness session",
+      "description": "A brief guided meditation can help support a calmer mind."
+    },
+    "wellness_003": {
+      "title": "Spend time outdoors when suitable",
+      "description": "A little time outside in good weather can support overall wellbeing."
+    },
+    "wellness_004": {
+      "title": "Connect with friends or family regularly",
+      "description": "Regular social connection can support emotional wellbeing."
+    },
+    "wellness_005": {
+      "title": "Practice gratitude journaling",
+      "description": "Writing down a few things you're grateful for can support a positive mindset."
+    },
+    "wellness_006": {
+      "title": "Take short relaxation breaks during work",
+      "description": "A few minutes away from screens and tasks can help you reset."
+    },
+    "wellness_007": {
+      "title": "Wind down with a warm evening routine",
+      "description": "A calm evening routine can help signal to your body that it's time to rest."
+    },
+    "wellness_008": {
+      "title": "Practice deep breathing before sleep",
+      "description": "Slow breathing before bed can help ease tension and support restful sleep."
+    },
+    "wellness_009": {
+      "title": "Limit caffeine intake in the evening",
+      "description": "Reducing caffeine later in the day may support better rest."
+    },
+    "wellness_010": {
+      "title": "Make time for a relaxing hobby",
+      "description": "Regular time spent on an enjoyable, relaxing activity can support wellbeing."
+    }
+  },
+  "reasonCodes": {
+    "AFTERNOON_ACTIVITY_MATCH": "Matches afternoon activity, hydration or meal balance.",
+    "BLOOD_SUGAR_FRIENDLY": "Prioritized for blood-sugar-related lifestyle goals.",
+    "BP_SUPPORTIVE_HABIT": "Prioritizes a lifestyle habit relevant to blood pressure goals.",
+    "COMPLETED_RECOMMENDATION_BONUS": "Previous completion influenced its ranking.",
+    "EVENING_RELAXATION_MATCH": "Matches evening relaxation or light activity.",
+    "FIBER_PRIORITY": "Prioritizes fiber-rich choices.",
+    "HEART_HEALTHY_PRIORITY": "Prioritizes choices tagged as heart-friendly.",
+    "LOW_ACTIVITY_INTENSITY_REDUCED": "Higher-intensity activity was given lower priority for a low activity level.",
+    "LOW_ACTIVITY_PREFERRED_CHOICE": "Prioritizes gentle activity for a low activity level.",
+    "LOW_SODIUM_PRIORITY": "Prioritizes lower-sodium choices.",
+    "LOW_SUGAR_PRIORITY": "Prioritizes lower-sugar choices.",
+    "MORNING_ROUTINE_MATCH": "Matches a morning routine.",
+    "MULTI_CONDITION_INTENSITY_CAUTION": "Use caution with higher-intensity activity when multiple conditions are present.",
+    "MULTI_CONDITION_SAFE_CHOICE": "Passed the current rule checks for the selected conditions.",
+    "NIGHT_SLEEP_PRIORITY": "Night-time context influenced the balance between activity and rest.",
+    "OUTDOOR_UNSUITABLE_INDOOR_PREFERRED": "The supplied context favors an indoor alternative.",
+    "RECENT_RECOMMENDATION_PENALTY": "Recent display reduced its ranking to allow more variety.",
+    "REDUCE_FRIED_FOOD": "Prioritizes reducing fried foods.",
+    "REGULAR_MEAL_TIMING": "Prioritizes consistent meal timing.",
+    "STRESS_REDUCTION_PRIORITY": "Prioritizes stress-reduction habits.",
+    "WEATHER_COLD_INDOOR_ACTIVITY": "Cold-weather context favors indoor activity.",
+    "WEATHER_GOOD_OUTDOOR_ACTIVITY": "Suitable-weather context supports light outdoor activity.",
+    "WEATHER_HOT_HYDRATION_PRIORITY": "Hot-weather context increases hydration priority.",
+    "WEATHER_HOT_OUTDOOR_EXERCISE_REDUCED": "Hot-weather context lowers the priority of more intense outdoor exercise.",
+    "WEATHER_RAIN_INDOOR_ALTERNATIVE": "Rainy-weather context favors an indoor alternative.",
+    "BASE_PROFILE_MATCH": "Matches the basic profile filters.",
+    "UNSAFE_FOR_HYPERCHOLESTEROLEMIA": "Excluded by the current safety rules for a selected condition.",
+    "UNSAFE_FOR_HYPERTENSION": "Excluded by the current safety rules for a selected condition.",
+    "UNSAFE_FOR_INSULIN_RESISTANCE": "Excluded by the current safety rules for a selected condition.",
+    "UNSAFE_FOR_TYPE_2_DIABETES": "Excluded by the current safety rules for a selected condition."
+  },
+  "screens": {
+    "BloodPressure": {
+      "couldnTLoadBloodPressureReadings": "Couldn't load blood pressure readings.",
+      "couldnTSaveThisReading": "Couldn't save this reading.",
+      "couldnTDeleteThisReading": "Couldn't delete this reading.",
+      "bloodPressure": "Blood Pressure",
+      "addReading": "Add Reading",
+      "editReading": "Edit Reading",
+      "systolicMmhg": "Systolic (mmHg)",
+      "eG120": "e.g. 120",
+      "diastolicMmhg": "Diastolic (mmHg)",
+      "eG80": "e.g. 80",
+      "pulseBpm": "Pulse (bpm)",
+      "eG72": "e.g. 72",
+      "dateMeasured": "Date Measured",
+      "notes": "Notes",
+      "eGMorningReading": "e.g. Morning reading",
+      "cancel": "Cancel",
+      "save": "Save",
+      "deleteReading": "Delete Reading",
+      "deleteThisReadingThisCanTBeUndone": "Delete this reading? This can't be undone.",
+      "yesDelete": "Yes, Delete",
+      "noBloodPressureReadingsYetTapToAddOne": "No blood pressure readings yet. Tap + to add one.",
+      "mmhg": "mmHg",
+      "pulse": "Pulse:",
+      "bpm": "bpm"
+    },
+    "HealthInfo": {
+      "sedentary": "Sedentary",
+      "light": "Light",
+      "moderate": "Moderate",
+      "active": "Active",
+      "veryActive": "Very Active",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "diabetes": "Diabetes",
+      "hypertension": "Hypertension",
+      "dyslipidemia": "Dyslipidemia",
+      "insulinResistance": "Insulin Resistance",
+      "mother": "Mother",
+      "father": "Father",
+      "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again.",
+      "pleaseGoBackAndReEnterYourBodyInfoAndLifestyleDetailsFirst": "Please go back and re-enter your Body Info and Lifestyle details first.",
+      "tellUsAboutYourHealth": "Tell us about your health",
+      "thisHelpsUsPersonalizeYourRecommendations": "This helps us personalize your recommendations.",
+      "heightCm": "Height (cm)",
+      "eG170": "e.g. 170",
+      "enterAHeightBetween": "Enter a height between",
+      "cm": "cm.",
+      "weightKg": "Weight (kg)",
+      "eG68": "e.g. 68",
+      "enterAWeightBetween": "Enter a weight between",
+      "kg": "kg.",
+      "waistCircumferenceCm": "Waist Circumference (cm)",
+      "eG80": "e.g. 80",
+      "enterAWaistSizeBetween": "Enter a waist size between",
+      "activityLevel": "Activity Level",
+      "pleaseSelectAnActivityLevel": "Please select an activity level.",
+      "next": "Next",
+      "sleepHoursPerNight": "Sleep Hours (per night)",
+      "eG75": "e.g. 7.5",
+      "enterHoursBetween": "Enter hours between",
+      "stressLevel": "Stress Level",
+      "pleaseSelectAStressLevel": "Please select a stress level.",
+      "doYouSmoke": "Do you smoke?",
+      "yes": "Yes",
+      "no": "No",
+      "pleaseSelectAnOption": "Please select an option.",
+      "waterIntakeLitersDay": "Water Intake (liters/day)",
+      "eG25": "e.g. 2.5",
+      "enterLitersBetween": "Enter liters between",
+      "doYouCurrentlyHaveAnyOfTheseConditions": "Do you currently have any of these conditions?",
+      "noneOfTheseApplyToMe": "None of these apply to me",
+      "hasAnyoneInYourImmediateFamilyHadTheseConditions": "Has anyone in your immediate family had these conditions?",
+      "selectAConditionAboveToAddFamilyHistoryForIt": "Select a condition above to add family history for it.",
+      "noKnownFamilyHistoryOfTheseConditions": "No known family history of these conditions",
+      "finish": "Finish",
+      "saving": "Saving...",
+      "type2Diabetes": "Type 2 Diabetes",
+      "hypercholesterolemia": "Hypercholesterolemia"
+    },
+    "Home": {
+      "labResults": "Lab Results",
+      "bloodPressure": "Blood Pressure",
+      "medication": "Medication",
+      "welcomeBack": "Welcome back 👋",
+      "todaySHealthRecommendation": "Today's Health Recommendation",
+      "30MinuteWalkAfterLunch": "30-minute walk after lunch",
+      "recommendedBasedOnYourActivityLevelAndHealthGoals": "Recommended based on your activity level and health goals.",
+      "reminderSet": "Reminder Set",
+      "remindMe": "Remind Me",
+      "done": "Done",
+      "markAsDone": "Mark as Done",
+      "healthRecords": "Health Records",
+      "weeklyWellnessScore": "Weekly Wellness Score",
+      "3GoalsCompletedThisWeek": "3 goals completed this week",
+      "todaySPlan": "Today's Plan"
+    },
+    "LabResults": {
+      "couldnTLoadLabResults": "Couldn't load lab results.",
+      "couldnTSaveThisLabResult": "Couldn't save this lab result.",
+      "couldnTDeleteThisLabResult": "Couldn't delete this lab result.",
+      "labResults": "Lab Results",
+      "addLabResult": "Add Lab Result",
+      "editLabResult": "Edit Lab Result",
+      "hba1c": "HbA1c (%)",
+      "eG56": "e.g. 5.6",
+      "fastingGlucoseMgDl": "Fasting Glucose (mg/dL)",
+      "eG95": "e.g. 95",
+      "randomGlucoseMgDl": "Random Glucose (mg/dL)",
+      "eG110": "e.g. 110",
+      "ogttMgDl": "OGTT (mg/dL)",
+      "eG140": "e.g. 140",
+      "totalCholesterolMgDl": "Total Cholesterol (mg/dL)",
+      "eG180": "e.g. 180",
+      "ldlMgDl": "LDL (mg/dL)",
+      "eG100": "e.g. 100",
+      "hdlMgDl": "HDL (mg/dL)",
+      "eG50": "e.g. 50",
+      "triglyceridesMgDl": "Triglycerides (mg/dL)",
+      "eG120": "e.g. 120",
+      "fastingInsulinIuMl": "Fasting Insulin (µIU/mL)",
+      "eG85": "e.g. 8.5",
+      "testDate": "Test Date",
+      "cancel": "Cancel",
+      "save": "Save",
+      "deleteLabResult": "Delete Lab Result",
+      "deleteThisLabResultThisCanTBeUndone": "Delete this lab result? This can't be undone.",
+      "yesDelete": "Yes, Delete",
+      "noLabResultsYetTapToAddOne": "No lab results yet. Tap + to add one.",
+      "hba1cedb199": "HbA1c",
+      "fastingGlucose": "Fasting Glucose",
+      "randomGlucose": "Random Glucose",
+      "ogtt": "OGTT",
+      "totalCholesterol": "Total Cholesterol",
+      "ldl": "LDL",
+      "hdl": "HDL",
+      "triglycerides": "Triglycerides",
+      "fastingInsulin": "Fasting Insulin",
+      "homaIr": "HOMA-IR",
+      "noDate": "No date"
+    },
+    "Medication": {
+      "couldnTLoadMedications": "Couldn't load medications.",
+      "couldnTSaveThisMedication": "Couldn't save this medication.",
+      "couldnTDeleteThisMedication": "Couldn't delete this medication.",
+      "medication": "Medication",
+      "addMedication": "Add Medication",
+      "editMedication": "Edit Medication",
+      "name": "Name",
+      "eGMetformin": "e.g. Metformin",
+      "dose": "Dose",
+      "eG500mg": "e.g. 500mg",
+      "frequency": "Frequency",
+      "eGTwiceDaily": "e.g. Twice daily",
+      "relatedCondition": "Related Condition",
+      "eGDiabetes": "e.g. Diabetes",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "notes": "Notes",
+      "optionalNotes": "Optional notes",
+      "cancel": "Cancel",
+      "save": "Save",
+      "deleteMedication": "Delete Medication",
+      "deleteThisMedicationThisCanTBeUndone": "Delete this medication? This can't be undone.",
+      "yesDelete": "Yes, Delete",
+      "noMedicationsYetTapToAddOne": "No medications yet. Tap + to add one.",
+      "for": "For"
+    },
+    "Onboarding": {
+      "yourHealth": "Your health,",
+      "guidedPersonally": "guided personally",
+      "getPersonalizedLifestyleRecommendationsBasedOnYourHealthGoalsHabitsAndDailyNeeds": "Get personalized lifestyle recommendations based on your health, goals, habits, and daily needs.",
+      "getStarted": "Get Started"
+    },
+    "Profile": {
+      "notifications": "Notifications",
+      "privacySecurity": "Privacy & Security",
+      "helpSupport": "Help & Support",
+      "aboutVelora": "About VeLora",
+      "sedentary": "Sedentary",
+      "light": "Light",
+      "moderate": "Moderate",
+      "active": "Active",
+      "veryActive": "Very Active",
+      "labResults": "Lab Results",
+      "bloodPressure": "Blood Pressure",
+      "medication": "Medication",
+      "couldnTSaveYourChanges": "Couldn't save your changes.",
+      "couldnTLoadYourHealthProfile": "Couldn't load your health profile.",
+      "fullName": "Full Name",
+      "email": "Email",
+      "gender": "Gender",
+      "dateOfBirth": "Date of Birth",
+      "height": "Height",
+      "weight": "Weight",
+      "activityLevel": "Activity Level",
+      "waterGoal": "Water Goal",
+      "cancel": "Cancel",
+      "editProfile": "Edit Profile",
+      "personalInformation": "Personal Information",
+      "healthProfile": "Health Profile",
+      "heightCm": "Height (cm)",
+      "eG170": "e.g. 170",
+      "weightKg": "Weight (kg)",
+      "eG70": "e.g. 70",
+      "waterGoalLDay": "Water Goal (L / day)",
+      "eG25": "e.g. 2.5",
+      "saveChanges": "Save Changes",
+      "noHealthProfileDataYet": "No health profile data yet.",
+      "healthRecords": "Health Records",
+      "settings": "Settings",
+      "logOut": "Log Out"
+    },
+    "SignUp": {
+      "female": "Female",
+      "male": "Male",
+      "other": "Other",
+      "alreadyExists": "already exists",
+      "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again.",
+      "emailSent": "Email Sent",
+      "weVeResentTheConfirmationLinkToYourEmail": "We've resent the confirmation link to your email.",
+      "createYourAccount": "Create your account",
+      "fullName": "Full Name",
+      "enterYourFullName": "Enter your full name",
+      "3150CharactersLettersSpacesHyphensOrApostrophesOnly": "3-150 characters: letters, spaces, hyphens or apostrophes only.",
+      "email": "Email",
+      "enterYourEmail": "Enter your email",
+      "enterAValidEmailAddress": "Enter a valid email address.",
+      "password": "Password",
+      "createAPassword": "Create a password",
+      "atLeast8CharactersWithAnUppercaseLetterALowercaseLetterAndADigit": "At least 8 characters, with an uppercase letter, a lowercase letter, and a digit.",
+      "confirmPassword": "Confirm Password",
+      "reEnterYourPassword": "Re-enter your password",
+      "passwordsDoNotMatch": "Passwords do not match.",
+      "next": "Next",
+      "gender": "Gender",
+      "pleaseSelectAGender": "Please select a gender.",
+      "dateOfBirth": "Date of Birth",
+      "ddMmYyyy": "DD/MM/YYYY",
+      "enterAValidDateDdMmYyyyYouMustBeAtLeast13": "Enter a valid date (DD/MM/YYYY); you must be at least 13.",
+      "createAccount": "Create Account",
+      "checkYourEmail": "Check your email",
+      "weSentAConfirmationLinkTo": "We sent a confirmation link to",
+      "verifyYourEmailToActivateYourAccount": ". Verify your email to activate your account.",
+      "resendConfirmationEmail": "Resend confirmation email",
+      "didnTGetItYouCanResendShortly": "Didn't get it? You can resend shortly.",
+      "backToLogin": "Back to Login",
+      "alreadyHaveAnAccount": "Already have an account?",
+      "logIn": "Log In",
+      "creatingYourAccount": "Creating your account..."
+    },
+    "Welcome": {
+      "enterYourEmailAboveThenTapForgotPasswordAgain": "Enter your email above, then tap \"Forgot Password?\" again.",
+      "checkYourEmail": "Check Your Email",
+      "ifAnAccountExistsForThatEmailWeVeSentPasswordResetInstructions": "If an account exists for that email, we've sent password reset instructions.",
+      "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again.",
+      "enterYourEmailAboveThenTapResendConfirmationEmailAgain": "Enter your email above, then tap \"Resend Confirmation Email\" again.",
+      "emailSent": "Email Sent",
+      "weVeResentTheConfirmationLinkToYourEmail": "We've resent the confirmation link to your email.",
+      "enterYourEmailAndPasswordToContinue": "Enter your email and password to continue.",
+      "pleaseConfirmYourEmailBeforeLoggingIn": "Please confirm your email before logging in.",
+      "incorrectEmailOrPassword": "Incorrect email or password.",
+      "yourHealthOurPriority": "\"Your Health, Our Priority\"",
+      "heyWelcomeBack": "Hey, Welcome back!",
+      "gladToSeeYouAgain": "Glad to see you, Again!",
+      "emailOrPhoneNumber": "Email or Phone Number",
+      "enterEmailOrPhoneNumber": "Enter email or phone number",
+      "password": "Password",
+      "enterYourPassword": "Enter your password",
+      "resendConfirmationEmail": "Resend Confirmation Email",
+      "forgotPassword": "Forgot Password?",
+      "continue": "Continue",
+      "orContinueWith": "Or continue with",
+      "donTHaveAnAccount": "Don't have an account?",
+      "signUp": "Sign Up",
+      "needHelp": "Need Help?",
+      "loading": "Loading..."
+    },
+    "BottomNav": {
+      "home": "Home",
+      "plan": "Plan",
+      "add": "Add",
+      "progress": "Progress",
+      "profile": "Profile"
+    },
+    "DateInput": {
+      "ddMmYyyy": "DD/MM/YYYY",
+      "enterAValidDateDdMmYyyy": "Enter a valid date (DD/MM/YYYY)."
+    }
+  },
+  "errors": {
+    "network": "Cannot reach the server. Check your connection.",
+    "session": "Session expired. Please log in again.",
+    "forbidden": "Complete your profile or sign in with an authorized account.",
+    "notFound": "The requested item is unavailable.",
+    "validation": "Check the entered fields and try again.",
+    "timeout": "The request timed out. Please try again.",
+    "unavailable": "Recommendations are temporarily unavailable. Your saved profile is safe.",
+    "server": "Something went wrong. Please try again later."
+  },
+  "health": {
+    "conditionUnavailable": "This condition has no unambiguous supported catalog code. Contact support."
+  },
+  "recommendationUi": {
+    "pending": "Recommendations are being prepared.",
+    "unavailable": "Your profile was saved. Recommendations could not be generated; you can retry.",
+    "empty": "No recommendations yet. Complete your profile or refresh later.",
+    "caution": "Use caution with this activity; choose a gentler option if needed.",
+    "englishFallback": "Additional explanation (English)"
+  },
+  "feedback": {
+    "like": "Like",
+    "dislike": "Dislike",
+    "complete": "Mark completed",
+    "completed": "Completed"
+  },
+  "categories": {
+    "Diet": "Diet",
+    "Exercise": "Exercise",
+    "Daily Habits": "Daily habits",
+    "Wellness": "Wellness"
+  },
+  "enums": {
+    "Male": "Male",
+    "Female": "Female",
+    "Sedentary": "Sedentary",
+    "LightlyActive": "Lightly active",
+    "ModeratelyActive": "Moderately active",
+    "VeryActive": "Very active",
+    "ExtraActive": "Extra active"
+  },
+  "validation": {
+    "range": "Enter a value between {{min}} and {{max}} {{unit}}."
+  }
+}

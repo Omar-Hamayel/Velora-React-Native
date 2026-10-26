@@ -1,18 +1,9 @@
+import { translate } from "../localization/core";
+import LanguageSelector from "../components/LanguageSelector";
 import React, { useRef, useState } from "react";
 import {
-  Alert,
-  Dimensions,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text, TextInput } from "../components/LocalizedText";
 import { Ionicons } from "@expo/vector-icons";
 import ErrorBanner from "../components/ErrorBanner";
 import LoadingVideoOverlay from "../components/LoadingVideoOverlay";
@@ -55,6 +46,7 @@ export default function WelcomeScreen({
   const [isForgotLoading, setIsForgotLoading] = useState(false);
   const [isResendLoading, setIsResendLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   // Hidden until a login attempt actually fails because the email isn't
   // confirmed yet — showing it unconditionally would offer "resend" before
   // there's any known reason to need it.
@@ -64,20 +56,19 @@ export default function WelcomeScreen({
 
   const handleForgotPassword = async () => {
     if (isForgotLoading) return;
+    setSuccessMessage(null);
+    setErrorMessage(null);
     if (!email.trim()) {
-      setErrorMessage('Enter your email above, then tap "Forgot Password?" again.');
+      setErrorMessage(translate("screens.Welcome.enterYourEmailAboveThenTapForgotPasswordAgain"));
       return;
     }
     setIsForgotLoading(true);
     try {
       await forgotPassword(email.trim());
-      Alert.alert(
-        "Check Your Email",
-        "If an account exists for that email, we've sent password reset instructions."
-      );
+      setSuccessMessage(translate("screens.Welcome.ifAnAccountExistsForThatEmailWeVeSentPasswordResetInstructions"));
     } catch (err) {
       const message =
-        err instanceof ApiError ? err.message : "Something went wrong. Please try again.";
+        err instanceof ApiError ? err.message : translate("screens.Welcome.somethingWentWrongPleaseTryAgain");
       setErrorMessage(message);
     } finally {
       setIsForgotLoading(false);
@@ -92,17 +83,19 @@ export default function WelcomeScreen({
 
   const handleResendFromLogin = async () => {
     if (isResendLoading) return;
+    setSuccessMessage(null);
+    setErrorMessage(null);
     if (!email.trim()) {
-      setErrorMessage('Enter your email above, then tap "Resend Confirmation Email" again.');
+      setErrorMessage(translate("screens.Welcome.enterYourEmailAboveThenTapResendConfirmationEmailAgain"));
       return;
     }
     setIsResendLoading(true);
     try {
       await resendConfirmationEmail(email.trim());
-      Alert.alert("Email Sent", "We've resent the confirmation link to your email.");
+      setSuccessMessage(translate("screens.Welcome.weVeResentTheConfirmationLinkToYourEmail"));
     } catch (err) {
       const message =
-        err instanceof ApiError ? err.message : "Something went wrong. Please try again.";
+        err instanceof ApiError ? err.message : translate("screens.Welcome.somethingWentWrongPleaseTryAgain");
       setErrorMessage(message);
     } finally {
       setIsResendLoading(false);
@@ -111,8 +104,10 @@ export default function WelcomeScreen({
 
   const handleContinuePress = async () => {
     if (isLoading) return;
+    setSuccessMessage(null);
+    setErrorMessage(null);
     if (!email.trim() || !password) {
-      setErrorMessage("Enter your email and password to continue.");
+      setErrorMessage(translate("screens.Welcome.enterYourEmailAndPasswordToContinue"));
       return;
     }
     setIsLoading(true);
@@ -135,15 +130,15 @@ export default function WelcomeScreen({
       // different signal.
       if (err instanceof ApiError) {
         const isEmailNotConfirmed =
-          err.status === 403 || err.message.toLowerCase().includes("confirm");
+          err.message === translate("auth.confirmEmail");
         if (isEmailNotConfirmed) {
-          setErrorMessage("Please confirm your email before logging in.");
+          setErrorMessage(translate("screens.Welcome.pleaseConfirmYourEmailBeforeLoggingIn"));
           setShowResendLink(true);
         } else {
-          setErrorMessage("Incorrect email or password.");
+          setErrorMessage(err.status === 400 ? translate("auth.invalidLogin") : err.message);
         }
       } else {
-        setErrorMessage("Something went wrong. Please try again.");
+        setErrorMessage(translate("screens.Welcome.somethingWentWrongPleaseTryAgain"));
       }
     } finally {
       setIsLoading(false);
@@ -154,6 +149,7 @@ export default function WelcomeScreen({
     <View style={styles.outer}>
       <View style={styles.safeArea}>
         <StatusBar barStyle="light-content" translucent />
+        <LanguageSelector />
         <KeyboardAvoidingView
           style={styles.keyboardAvoider}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -172,19 +168,19 @@ export default function WelcomeScreen({
             resizeMode="cover"
           />
           <View style={styles.quoteWrap}>
-            <Text style={styles.quote}>"Your Health, Our Priority"</Text>
+            <Text style={styles.quote}>{translate("screens.Welcome.yourHealthOurPriority")}</Text>
           </View>
         </View>
 
         <View style={styles.sheet}>
-          <Text style={styles.title}>Hey, Welcome back!</Text>
-          <Text style={styles.subtitle}>Glad to see you, Again!</Text>
+          <Text style={styles.title}>{translate("screens.Welcome.heyWelcomeBack")}</Text>
+          <Text style={styles.subtitle}>{translate("screens.Welcome.gladToSeeYouAgain")}</Text>
 
-          <Text style={styles.label}>Email or Phone Number</Text>
+          <Text style={styles.label}>{translate("screens.Welcome.emailOrPhoneNumber")}</Text>
           <View style={styles.inputRow}>
             <TextInput
               style={styles.input}
-              placeholder="Enter email or phone number"
+              placeholder={translate("screens.Welcome.enterEmailOrPhoneNumber")}
               placeholderTextColor={COLORS.gray}
               autoCapitalize="none"
               autoCorrect={false}
@@ -194,11 +190,11 @@ export default function WelcomeScreen({
             />
           </View>
 
-          <Text style={[styles.label, styles.labelTight]}>Password</Text>
+          <Text style={[styles.label, styles.labelTight]}>{translate("screens.Welcome.password")}</Text>
           <View style={styles.inputRow}>
             <TextInput
               style={styles.input}
-              placeholder="Enter your password"
+              placeholder={translate("screens.Welcome.enterYourPassword")}
               placeholderTextColor={COLORS.gray}
               secureTextEntry={!showPassword}
               autoCapitalize="none"
@@ -219,6 +215,7 @@ export default function WelcomeScreen({
           </View>
 
           <ErrorBanner message={errorMessage} onDismiss={() => setErrorMessage(null)} />
+          <ErrorBanner message={successMessage} tone="success" onDismiss={() => setSuccessMessage(null)} />
 
           <View
             style={[
@@ -233,7 +230,7 @@ export default function WelcomeScreen({
                 onPress={handleResendFromLogin}
               >
                 <Text style={styles.forgotText}>
-                  {isResendLoading ? "Sending..." : "Resend Confirmation Email"}
+                  {isResendLoading ? translate("common.sending") : translate("screens.Welcome.resendConfirmationEmail")}
                 </Text>
               </TouchableOpacity>
             )}
@@ -244,7 +241,7 @@ export default function WelcomeScreen({
               onPress={handleForgotPassword}
             >
               <Text style={styles.forgotText}>
-                {isForgotLoading ? "Sending..." : "Forgot Password?"}
+                {isForgotLoading ? translate("common.sending") : translate("screens.Welcome.forgotPassword")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -255,12 +252,12 @@ export default function WelcomeScreen({
             activeOpacity={0.85}
             onPress={handleContinuePress}
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            <Text style={styles.continueButtonText}>{translate("screens.Welcome.continue")}</Text>
           </TouchableOpacity>
 
           <View style={styles.dividerRow}>
             <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>Or continue with</Text>
+            <Text style={styles.dividerText}>{translate("screens.Welcome.orContinueWith")}</Text>
             <View style={styles.dividerLine} />
           </View>
 
@@ -277,21 +274,21 @@ export default function WelcomeScreen({
           </View>
 
           <View style={styles.signupRow}>
-            <Text style={styles.signupText}>Don't have an account? </Text>
+            <Text style={styles.signupText}>{translate("screens.Welcome.donTHaveAnAccount")} </Text>
             <TouchableOpacity ref={signUpRef} activeOpacity={0.7} onPress={handleSignUpPress}>
-              <Text style={styles.signupLink}>Sign Up</Text>
+              <Text style={styles.signupLink}>{translate("screens.Welcome.signUp")}</Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity style={styles.helpWrap} activeOpacity={0.7}>
-            <Text style={styles.helpText}>Need Help?</Text>
+            <Text style={styles.helpText}>{translate("screens.Welcome.needHelp")}</Text>
           </TouchableOpacity>
         </View>
         </ScrollView>
         </KeyboardAvoidingView>
       </View>
 
-      {isLoading && <LoadingVideoOverlay text="Loading..." />}
+      {isLoading && <LoadingVideoOverlay text={translate("screens.Welcome.loading")} />}
     </View>
   );
 }
@@ -325,8 +322,8 @@ const styles = StyleSheet.create({
   quoteWrap: {
     position: "absolute",
     top: 56,
-    left: 20,
-    right: 20,
+    start: 20,
+    end: 20,
   },
   quote: {
     fontSize: 17,

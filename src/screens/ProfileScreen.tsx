@@ -1,15 +1,9 @@
+import { translate, i18n, medicalNumber } from "../localization/core";
+import LanguageSelector from "../components/LanguageSelector";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  ActivityIndicator, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text, TextInput } from "../components/LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import BottomNav from "../components/BottomNav";
@@ -57,7 +51,7 @@ type InfoRow = { icon: keyof typeof Ionicons.glyphMap; label: string; value: str
 // The backend returns enum values as PascalCase ("ModeratelyActive", "Low")
 // with no spaces — this only affects display, not anything sent back to it.
 function humanizeEnum(value: string): string {
-  return value.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
+  return translate(`enums.${value}`, {defaultValue: value});
 }
 
 function formatDateOfBirth(iso: string): string {
@@ -69,23 +63,23 @@ function formatDateOfBirth(iso: string): string {
 type MenuRow = { icon: keyof typeof Ionicons.glyphMap; label: string };
 
 const SETTINGS_MENU: MenuRow[] = [
-  { icon: "notifications-outline", label: "Notifications" },
-  { icon: "shield-checkmark-outline", label: "Privacy & Security" },
-  { icon: "help-circle-outline", label: "Help & Support" },
-  { icon: "information-circle-outline", label: "About VeLora" },
+  { icon: "notifications-outline", label: "screens.Profile.notifications" },
+  { icon: "shield-checkmark-outline", label: "screens.Profile.privacySecurity" },
+  { icon: "help-circle-outline", label: "screens.Profile.helpSupport" },
+  { icon: "information-circle-outline", label: "screens.Profile.aboutVelora" },
 ];
 
 const ACTIVITY_EDIT_OPTIONS: { value: ActivityLevel; label: string }[] = [
-  { value: "Sedentary", label: "Sedentary" },
-  { value: "Light", label: "Light" },
-  { value: "Moderate", label: "Moderate" },
-  { value: "Active", label: "Active" },
-  { value: "VeryActive", label: "Very Active" },
+  { value: "Sedentary", label: "screens.Profile.sedentary" },
+  { value: "Light", label: "screens.Profile.light" },
+  { value: "Moderate", label: "screens.Profile.moderate" },
+  { value: "Active", label: "screens.Profile.active" },
+  { value: "VeryActive", label: "screens.Profile.veryActive" },
 ];
 
 function numberInRange(value: string, min: number, max: number): boolean {
   if (value.trim() === "") return false;
-  const num = Number(value);
+  const num = medicalNumber(value);
   return Number.isFinite(num) && num >= min && num <= max;
 }
 
@@ -103,9 +97,9 @@ const RECORD_TILES: {
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
 }[] = [
-  { key: "labResults", label: "Lab Results", icon: "flask-outline" },
-  { key: "bloodPressure", label: "Blood Pressure", icon: "heart-outline" },
-  { key: "medication", label: "Medication", icon: "medkit-outline" },
+  { key: "labResults", label: "screens.Profile.labResults", icon: "flask-outline" },
+  { key: "bloodPressure", label: "screens.Profile.bloodPressure", icon: "heart-outline" },
+  { key: "medication", label: "screens.Profile.medication", icon: "medkit-outline" },
 ];
 
 export default function ProfileScreen({
@@ -171,14 +165,15 @@ export default function ProfileScreen({
       // The update endpoint validates the full record, not just the fields
       // shown here — waist/sleep/stress/smoking are carried over unchanged
       // from what's already saved.
-      const stressLevel = stressLevelFromLabel(healthProfile.stressLevel) ?? "Low";
+      const stressLevel = stressLevelFromLabel(healthProfile.stressLevel);
+      if (!stressLevel) throw new ApiError(translate("errors.validation"), 400);
       await updateUserHealthProfile(healthProfile.id, {
-        heightCm: Number(editHeight),
-        weightKg: Number(editWeight),
+        heightCm: medicalNumber(editHeight),
+        weightKg: medicalNumber(editWeight),
         waistCircumferenceCm: healthProfile.waistCircumferenceCm,
         activityLevel: editActivityLevel,
         sleepHours: healthProfile.sleepHours,
-        waterIntakeLitersPerDay: Number(editWaterIntake),
+        waterIntakeLitersPerDay: medicalNumber(editWaterIntake),
         isSmoker: healthProfile.isSmoker,
         stressLevel,
       });
@@ -186,7 +181,7 @@ export default function ProfileScreen({
       setHealthProfile(refreshed);
       setIsEditing(false);
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't save your changes.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.Profile.couldnTSaveYourChanges"));
     } finally {
       setIsSaving(false);
     }
@@ -201,7 +196,7 @@ export default function ProfileScreen({
       .catch((err) => {
         if (cancelled) return;
         setErrorMessage(
-          err instanceof ApiError ? err.message : "Couldn't load your health profile."
+          err instanceof ApiError ? err.message : translate("screens.Profile.couldnTLoadYourHealthProfile")
         );
       })
       .finally(() => {
@@ -213,14 +208,14 @@ export default function ProfileScreen({
   }, []);
 
   const personalInfo: InfoRow[] = [
-    { icon: "person-outline", label: "Full Name", value: user?.fullName || "—" },
-    { icon: "mail-outline", label: "Email", value: user?.email || "—" },
+    { icon: "person-outline", label: "screens.Profile.fullName", value: user?.fullName || "—" },
+    { icon: "mail-outline", label: "screens.Profile.email", value: user?.email || "—" },
     ...(user?.gender
       ? [
           {
             icon: "male-female-outline" as const,
-            label: "Gender",
-            value: user.gender.charAt(0).toUpperCase() + user.gender.slice(1),
+            label: "screens.Profile.gender",
+            value: translate(`enums.${user.gender === "male" ? "Male" : "Female"}`),
           },
         ]
       : []),
@@ -228,7 +223,7 @@ export default function ProfileScreen({
       ? [
           {
             icon: "calendar-outline" as const,
-            label: "Date of Birth",
+            label: "screens.Profile.dateOfBirth",
             value: formatDateOfBirth(user.dateOfBirth),
           },
         ]
@@ -237,16 +232,16 @@ export default function ProfileScreen({
 
   const healthProfileRows: InfoRow[] = healthProfile
     ? [
-        { icon: "resize-outline", label: "Height", value: `${healthProfile.heightCm} cm` },
-        { icon: "barbell-outline", label: "Weight", value: `${healthProfile.weightKg} kg` },
+        { icon: "resize-outline", label: "screens.Profile.height", value: `${healthProfile.heightCm} cm` },
+        { icon: "barbell-outline", label: "screens.Profile.weight", value: `${healthProfile.weightKg} kg` },
         {
           icon: "walk-outline",
-          label: "Activity Level",
+          label: "screens.Profile.activityLevel",
           value: humanizeEnum(healthProfile.activityLevel),
         },
         {
           icon: "water-outline",
-          label: "Water Goal",
+          label: "screens.Profile.waterGoal",
           value: `${healthProfile.waterIntakeLitersPerDay} L / day`,
         },
       ]
@@ -285,7 +280,7 @@ export default function ProfileScreen({
               disabled={!healthProfile && !isEditing}
             >
               <Text style={styles.editProfileButtonText}>
-                {isEditing ? "Cancel" : "Edit Profile"}
+                {isEditing ? translate("screens.Profile.cancel") : translate("screens.Profile.editProfile")}
               </Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -295,7 +290,7 @@ export default function ProfileScreen({
 
             {/* Personal Information */}
             <View style={[styles.card, styles.infoCard]}>
-              <Text style={styles.cardTitle}>Personal Information</Text>
+              <Text style={styles.cardTitle}>{translate("screens.Profile.personalInformation")}</Text>
               {personalInfo.map((row, index) => (
                 <View
                   key={row.label}
@@ -304,7 +299,7 @@ export default function ProfileScreen({
                   <View style={styles.infoIconBadge}>
                     <Ionicons name={row.icon} size={16} color={COLORS.teal} />
                   </View>
-                  <Text style={styles.infoLabel}>{row.label}</Text>
+                  <Text style={styles.infoLabel}>{translate(row.label)}</Text>
                   <Text style={styles.infoValue}>{row.value}</Text>
                 </View>
               ))}
@@ -312,32 +307,32 @@ export default function ProfileScreen({
 
             {/* Health Profile */}
             <View style={[styles.card, styles.infoCard]}>
-              <Text style={styles.cardTitle}>Health Profile</Text>
+              <Text style={styles.cardTitle}>{translate("screens.Profile.healthProfile")}</Text>
               {isLoading ? (
                 <ActivityIndicator style={styles.loadingIndicator} color={COLORS.teal} />
               ) : isEditing ? (
                 <View style={styles.editForm}>
-                  <Text style={styles.editLabel}>Height (cm)</Text>
+                  <Text style={styles.editLabel}>{translate("screens.Profile.heightCm")}</Text>
                   <TextInput
                     style={styles.editInput}
                     value={editHeight}
                     onChangeText={setEditHeight}
                     keyboardType="numeric"
-                    placeholder="e.g. 170"
+                    placeholder={translate("screens.Profile.eG170")}
                     placeholderTextColor={COLORS.grayLight}
                   />
 
-                  <Text style={styles.editLabel}>Weight (kg)</Text>
+                  <Text style={styles.editLabel}>{translate("screens.Profile.weightKg")}</Text>
                   <TextInput
                     style={styles.editInput}
                     value={editWeight}
                     onChangeText={setEditWeight}
                     keyboardType="numeric"
-                    placeholder="e.g. 70"
+                    placeholder={translate("screens.Profile.eG70")}
                     placeholderTextColor={COLORS.grayLight}
                   />
 
-                  <Text style={styles.editLabel}>Activity Level</Text>
+                  <Text style={styles.editLabel}>{translate("screens.Profile.activityLevel")}</Text>
                   <View style={styles.editPillRow}>
                     {ACTIVITY_EDIT_OPTIONS.map((option) => {
                       const selected = editActivityLevel === option.value;
@@ -354,20 +349,20 @@ export default function ProfileScreen({
                               selected && styles.editPillTextSelected,
                             ]}
                           >
-                            {option.label}
+                            {translate(option.label)}
                           </Text>
                         </TouchableOpacity>
                       );
                     })}
                   </View>
 
-                  <Text style={styles.editLabel}>Water Goal (L / day)</Text>
+                  <Text style={styles.editLabel}>{translate("screens.Profile.waterGoalLDay")}</Text>
                   <TextInput
                     style={styles.editInput}
                     value={editWaterIntake}
                     onChangeText={setEditWaterIntake}
                     keyboardType="numeric"
-                    placeholder="e.g. 2.5"
+                    placeholder={translate("screens.Profile.eG25")}
                     placeholderTextColor={COLORS.grayLight}
                   />
 
@@ -380,12 +375,12 @@ export default function ProfileScreen({
                     {isSaving ? (
                       <ActivityIndicator color={COLORS.white} />
                     ) : (
-                      <Text style={styles.saveButtonText}>Save Changes</Text>
+                      <Text style={styles.saveButtonText}>{translate("screens.Profile.saveChanges")}</Text>
                     )}
                   </TouchableOpacity>
                 </View>
               ) : healthProfileRows.length === 0 ? (
-                <Text style={styles.emptyText}>No health profile data yet.</Text>
+                <Text style={styles.emptyText}>{translate("screens.Profile.noHealthProfileDataYet")}</Text>
               ) : (
                 healthProfileRows.map((row, index) => (
                   <View
@@ -398,7 +393,7 @@ export default function ProfileScreen({
                     <View style={[styles.infoIconBadge, styles.infoIconBadgeGreen]}>
                       <Ionicons name={row.icon} size={16} color={COLORS.gradientEnd} />
                     </View>
-                    <Text style={styles.infoLabel}>{row.label}</Text>
+                    <Text style={styles.infoLabel}>{translate(row.label)}</Text>
                     <Text style={styles.infoValue}>{row.value}</Text>
                   </View>
                 ))
@@ -407,7 +402,7 @@ export default function ProfileScreen({
 
             {/* Health Records */}
             <View style={[styles.card, styles.menuCard]}>
-              <Text style={styles.cardTitle}>Health Records</Text>
+              <Text style={styles.cardTitle}>{translate("screens.Profile.healthRecords")}</Text>
               {RECORD_TILES.map((tile, index) => (
                 <TouchableOpacity
                   key={tile.key}
@@ -423,15 +418,16 @@ export default function ProfileScreen({
                   <View style={styles.infoIconBadge}>
                     <Ionicons name={tile.icon} size={16} color={COLORS.teal} />
                   </View>
-                  <Text style={styles.menuLabel}>{tile.label}</Text>
-                  <Ionicons name="chevron-forward" size={18} color={COLORS.grayLight} />
+                  <Text style={styles.menuLabel}>{translate(tile.label)}</Text>
+                  <Ionicons name={i18n.language === "ar" ? "chevron-back" : "chevron-forward"} size={18} color={COLORS.grayLight} />
                 </TouchableOpacity>
               ))}
             </View>
 
             {/* Settings */}
             <View style={[styles.card, styles.menuCard]}>
-              <Text style={styles.cardTitle}>Settings</Text>
+              <Text style={styles.cardTitle}>{translate("screens.Profile.settings")}</Text>
+              <LanguageSelector />
               {SETTINGS_MENU.map((row, index) => (
                 <TouchableOpacity
                   key={row.label}
@@ -444,8 +440,8 @@ export default function ProfileScreen({
                   <View style={styles.infoIconBadge}>
                     <Ionicons name={row.icon} size={16} color={COLORS.teal} />
                   </View>
-                  <Text style={styles.menuLabel}>{row.label}</Text>
-                  <Ionicons name="chevron-forward" size={18} color={COLORS.grayLight} />
+                  <Text style={styles.menuLabel}>{translate(row.label)}</Text>
+                  <Ionicons name={i18n.language === "ar" ? "chevron-back" : "chevron-forward"} size={18} color={COLORS.grayLight} />
                 </TouchableOpacity>
               ))}
             </View>
@@ -461,7 +457,7 @@ export default function ProfileScreen({
               ) : (
                 <>
                   <Ionicons name="log-out-outline" size={18} color={COLORS.gray} />
-                  <Text style={styles.logoutButtonText}>Log Out</Text>
+                  <Text style={styles.logoutButtonText}>{translate("screens.Profile.logOut")}</Text>
                 </>
               )}
             </TouchableOpacity>
@@ -516,7 +512,7 @@ const styles = StyleSheet.create({
   },
   editBadge: {
     position: "absolute",
-    right: 0,
+    end: 0,
     bottom: 0,
     width: 28,
     height: 28,

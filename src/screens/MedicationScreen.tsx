@@ -1,15 +1,8 @@
+import { translate, i18n } from "../localization/core";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "../components/LocalizedText";
 import { Ionicons } from "@expo/vector-icons";
 import ErrorBanner from "../components/ErrorBanner";
 import LabeledInput from "../components/LabeledInput";
@@ -109,7 +102,7 @@ export default function MedicationScreen({
     getMedications()
       .then((list) => setRecords([...list].reverse()))
       .catch((err) => {
-        setErrorMessage(err instanceof ApiError ? err.message : "Couldn't load medications.");
+        setErrorMessage(err instanceof ApiError ? err.message : translate("screens.Medication.couldnTLoadMedications"));
       })
       .finally(() => setIsLoading(false));
   };
@@ -153,7 +146,7 @@ export default function MedicationScreen({
       setEditingId(null);
       loadRecords();
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't save this medication.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.Medication.couldnTSaveThisMedication"));
     } finally {
       setIsSaving(false);
     }
@@ -169,7 +162,7 @@ export default function MedicationScreen({
       setConfirmingDelete(false);
       loadRecords();
     } catch (err) {
-      setErrorMessage(err instanceof ApiError ? err.message : "Couldn't delete this medication.");
+      setErrorMessage(err instanceof ApiError ? err.message : translate("screens.Medication.couldnTDeleteThisMedication"));
     } finally {
       setIsDeleting(false);
     }
@@ -183,13 +176,13 @@ export default function MedicationScreen({
           <TouchableOpacity
             activeOpacity={0.7}
             hitSlop={8}
-            onPress={(e) => onBack?.({ x: e.nativeEvent.pageX, y: e.nativeEvent.pageY })}
+            accessibilityRole="button" accessibilityLabel={translate("common.back")} onPress={(e) => onBack?.({ x: e.nativeEvent.pageX, y: e.nativeEvent.pageY })}
             style={styles.backButton}
           >
-            <Ionicons name="arrow-back" size={20} color={COLORS.black} />
+            <Ionicons name={i18n.language === "ar" ? "arrow-forward" : "arrow-back"} size={20} color={COLORS.black} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Medication</Text>
-          <TouchableOpacity activeOpacity={0.85} hitSlop={8} onPress={startAdd} style={styles.addButton}>
+          <Text style={styles.headerTitle}>{translate("screens.Medication.medication")}</Text>
+          <TouchableOpacity activeOpacity={0.85} hitSlop={8} accessibilityRole="button" accessibilityLabel={translate("screens.Medication.addMedication")} onPress={startAdd} style={styles.addButton}>
             <Ionicons name="add" size={22} color={COLORS.white} />
           </TouchableOpacity>
         </View>
@@ -208,28 +201,28 @@ export default function MedicationScreen({
 
           {editingId !== null && (
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>{editingId === "new" ? "Add Medication" : "Edit Medication"}</Text>
-              <LabeledInput label="Name" value={form.name} onChangeText={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="e.g. Metformin" />
-              <LabeledInput label="Dose" value={form.dose} onChangeText={(v) => setForm((f) => ({ ...f, dose: v }))} placeholder="e.g. 500mg" />
-              <LabeledInput label="Frequency" value={form.frequency} onChangeText={(v) => setForm((f) => ({ ...f, frequency: v }))} placeholder="e.g. Twice daily" />
-              <LabeledInput label="Related Condition" value={form.relatedDisease} onChangeText={(v) => setForm((f) => ({ ...f, relatedDisease: v }))} placeholder="e.g. Diabetes" />
+              <Text style={styles.cardTitle}>{editingId === "new" ? translate("screens.Medication.addMedication") : translate("screens.Medication.editMedication")}</Text>
+              <LabeledInput label={translate("screens.Medication.name")} value={form.name} onChangeText={(v) => setForm((f) => ({ ...f, name: v }))} placeholder={translate("screens.Medication.eGMetformin")} />
+              <LabeledInput label={translate("screens.Medication.dose")} value={form.dose} onChangeText={(v) => setForm((f) => ({ ...f, dose: v }))} placeholder={translate("screens.Medication.eG500mg")} />
+              <LabeledInput label={translate("screens.Medication.frequency")} value={form.frequency} onChangeText={(v) => setForm((f) => ({ ...f, frequency: v }))} placeholder={translate("screens.Medication.eGTwiceDaily")} />
+              <LabeledInput label={translate("screens.Medication.relatedCondition")} value={form.relatedDisease} onChangeText={(v) => setForm((f) => ({ ...f, relatedDisease: v }))} placeholder={translate("screens.Medication.eGDiabetes")} />
               <DateInput
-                label="Start Date"
+                label={translate("screens.Medication.startDate")}
                 value={form.startDate}
                 onChangeText={(v) => setForm((f) => ({ ...f, startDate: v }))}
                 invalid={!isValidOrEmptyDate(form.startDate)}
               />
               <DateInput
-                label="End Date"
+                label={translate("screens.Medication.endDate")}
                 value={form.endDate}
                 onChangeText={(v) => setForm((f) => ({ ...f, endDate: v }))}
                 invalid={!isValidOrEmptyDate(form.endDate)}
               />
-              <LabeledInput label="Notes" value={form.notes} onChangeText={(v) => setForm((f) => ({ ...f, notes: v }))} placeholder="Optional notes" />
+              <LabeledInput label={translate("screens.Medication.notes")} value={form.notes} onChangeText={(v) => setForm((f) => ({ ...f, notes: v }))} placeholder={translate("screens.Medication.optionalNotes")} />
 
               <View style={styles.formButtonRow}>
                 <TouchableOpacity activeOpacity={0.8} style={styles.cancelButton} onPress={cancelForm}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.cancelButtonText}>{translate("screens.Medication.cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.85}
@@ -237,7 +230,7 @@ export default function MedicationScreen({
                   onPress={save}
                   disabled={!formValid || isSaving}
                 >
-                  {isSaving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>Save</Text>}
+                  {isSaving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>{translate("screens.Medication.save")}</Text>}
                 </TouchableOpacity>
               </View>
 
@@ -248,22 +241,20 @@ export default function MedicationScreen({
                   onPress={() => setConfirmingDelete(true)}
                 >
                   <Ionicons name="trash-outline" size={16} color={COLORS.error} />
-                  <Text style={styles.deleteButtonText}>Delete Medication</Text>
+                  <Text style={styles.deleteButtonText}>{translate("screens.Medication.deleteMedication")}</Text>
                 </TouchableOpacity>
               )}
 
               {typeof editingId === "number" && confirmingDelete && (
                 <View style={styles.confirmDeleteWrap}>
-                  <Text style={styles.confirmDeleteText}>
-                    Delete this medication? This can't be undone.
-                  </Text>
+                  <Text style={styles.confirmDeleteText}>{translate("screens.Medication.deleteThisMedicationThisCanTBeUndone")}</Text>
                   <View style={styles.formButtonRow}>
                     <TouchableOpacity
                       activeOpacity={0.8}
                       style={styles.cancelButton}
                       onPress={() => setConfirmingDelete(false)}
                     >
-                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                      <Text style={styles.cancelButtonText}>{translate("screens.Medication.cancel")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.85}
@@ -274,7 +265,7 @@ export default function MedicationScreen({
                       {isDeleting ? (
                         <ActivityIndicator color={COLORS.white} />
                       ) : (
-                        <Text style={styles.saveButtonText}>Yes, Delete</Text>
+                        <Text style={styles.saveButtonText}>{translate("screens.Medication.yesDelete")}</Text>
                       )}
                     </TouchableOpacity>
                   </View>
@@ -288,7 +279,7 @@ export default function MedicationScreen({
           ) : records.length === 0 && editingId === null ? (
             <View style={styles.emptyWrap}>
               <Ionicons name="medkit-outline" size={36} color={COLORS.grayLight} />
-              <Text style={styles.emptyText}>No medications yet. Tap + to add one.</Text>
+              <Text style={styles.emptyText}>{translate("screens.Medication.noMedicationsYetTapToAddOne")}</Text>
             </View>
           ) : (
             records.map((record) => (
@@ -307,7 +298,7 @@ export default function MedicationScreen({
                   {record.frequency ? <Text style={styles.recordMeta}>{record.frequency}</Text> : null}
                 </View>
                 {record.relatedDisease ? (
-                  <Text style={styles.recordTag}>For {record.relatedDisease}</Text>
+                  <Text style={styles.recordTag}>{translate("screens.Medication.for")} {record.relatedDisease}</Text>
                 ) : null}
               </TouchableOpacity>
             ))

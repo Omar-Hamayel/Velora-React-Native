@@ -1,13 +1,8 @@
+import { translate } from "../localization/core";
 import React, { useRef } from "react";
 import {
-  Dimensions,
-  Image,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  Dimensions, Image, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "../components/LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 
 export type ScreenPoint = { x: number; y: number };
@@ -72,14 +67,9 @@ export default function OnboardingScreen({
 
         <View style={styles.content}>
           <Text style={styles.heading}>
-            <Text style={styles.headingAccent}>Your health, </Text>
-            guided personally
-          </Text>
+            <Text style={styles.headingAccent}>{translate("screens.Onboarding.yourHealth")} </Text>{translate("screens.Onboarding.guidedPersonally")}</Text>
 
-          <Text style={styles.description}>
-            Get personalized lifestyle recommendations based on your health,
-            goals, habits, and daily needs.
-          </Text>
+          <Text style={styles.description}>{translate("screens.Onboarding.getPersonalizedLifestyleRecommendationsBasedOnYourHealthGoalsHabitsAndDailyNeeds")}</Text>
         </View>
 
         <View style={styles.footer}>
@@ -89,7 +79,7 @@ export default function OnboardingScreen({
             activeOpacity={0.85}
             onPress={handlePress}
           >
-            <Text style={styles.buttonText}>Get Started</Text>
+            <Text style={styles.buttonText}>{translate("screens.Onboarding.getStarted")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -122,7 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.425,
     backgroundColor: COLORS.logoGreenLight,
     opacity: 0.4,
-    left: -width * 0.18,
+    start: -width * 0.18,
     top: -width * 0.12,
   },
   blobFront: {
@@ -132,7 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.325,
     backgroundColor: COLORS.logoTeal,
     opacity: 0.9,
-    right: -width * 0.12,
+    end: -width * 0.12,
     bottom: -width * 0.1,
   },
   dotAccentOne: {
@@ -143,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.logoTeal,
     opacity: 0.5,
     top: width * 0.1,
-    right: width * 0.12,
+    end: width * 0.12,
   },
   dotAccentTwo: {
     position: "absolute",
@@ -153,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.logoTealDark,
     opacity: 0.35,
     bottom: width * 0.14,
-    left: width * 0.14,
+    start: width * 0.14,
   },
   imageCard: {
     borderRadius: 32,

@@ -1,19 +1,8 @@
+import { translate, i18n, normalizeDigits } from "../localization/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Alert,
-  Animated,
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  Alert, Animated, Dimensions, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text, TextInput } from "../components/LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import LoadingVideoOverlay from "../components/LoadingVideoOverlay";
@@ -47,7 +36,7 @@ const COLORS = {
 // API's error responses), not just a reasonable guess:
 // FullName: 3-150 chars, letters/spaces/hyphens/apostrophes only.
 // Password: 8+ chars with an uppercase letter, a lowercase letter, and a digit.
-const FULL_NAME_REGEX = /^[A-Za-z\s'-]{3,150}$/;
+const FULL_NAME_REGEX = /^[\p{L}\s'-]{3,150}$/u;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const DOB_REGEX = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -68,11 +57,10 @@ function isValidDateOfBirth(value: string): boolean {
   return ageInYears >= 13 && ageInYears <= 120;
 }
 
-type Gender = "female" | "male" | "other";
+type Gender = "female" | "male";
 const GENDER_OPTIONS: { value: Gender; label: string }[] = [
-  { value: "female", label: "Female" },
-  { value: "male", label: "Male" },
-  { value: "other", label: "Other" },
+  { value: "female", label: "screens.SignUp.female" },
+  { value: "male", label: "screens.SignUp.male" },
 ];
 
 type FieldName = "fullName" | "email" | "password" | "confirmPassword" | "dob";
@@ -180,52 +168,8 @@ export default function SignUpScreen({
       setRegisteredEmail(email.trim());
       goToStep(3);
     } catch (err) {
-      // The backend's account-creation step and its confirmation-email step
-      // aren't wrapped together — confirmed by direct testing that the
-      // account is really created even when this call fails. That failure
-      // shows up two ways depending on how abruptly the server's unhandled
-      // exception cuts the response off: a clean, message-less 500, or the
-      // connection dropping before any response arrives at all (a generic
-      // network error client-side). A 500 is unambiguous, so it's treated
-      // as success outright. A network error isn't — it's genuinely
-      // indistinguishable from a real connectivity problem — so instead
-      // of guessing, this does one silent retry with the same payload:
-      // if the account was already created, the retry reports "already
-      // exists" (a safe, known signal in this specific context, since it's
-      // *our own* immediate resubmission, not a fresh guess days later),
-      // and that's treated as success too. A second straight network error
-      // means it really can't reach the server, so that's shown as an
-      // honest error rather than false-positiving into "check your email".
-      if (err instanceof ApiError && err.status === 500) {
-        setRegisteredEmail(email.trim());
-        goToStep(3);
-        return;
-      }
-      if (err instanceof ApiError && err.status === 0) {
-        try {
-          await register(payload);
-          setRegisteredEmail(email.trim());
-          goToStep(3);
-          return;
-        } catch (retryErr) {
-          if (
-            retryErr instanceof ApiError &&
-            (retryErr.status === 500 || retryErr.message.toLowerCase().includes("already exists"))
-          ) {
-            setRegisteredEmail(email.trim());
-            goToStep(3);
-            return;
-          }
-          const retryMessage =
-            retryErr instanceof ApiError
-              ? retryErr.message
-              : "Something went wrong. Please try again.";
-          setErrorMessage(retryMessage);
-          return;
-        }
-      }
       const message =
-        err instanceof ApiError ? err.message : "Something went wrong. Please try again.";
+        err instanceof ApiError ? err.message : translate("screens.SignUp.somethingWentWrongPleaseTryAgain");
       setErrorMessage(message);
     } finally {
       setIsLoading(false);
@@ -237,12 +181,12 @@ export default function SignUpScreen({
     setIsResending(true);
     try {
       await resendConfirmationEmail(registeredEmail);
-      Alert.alert("Email Sent", "We've resent the confirmation link to your email.");
+      Alert.alert(translate("screens.SignUp.emailSent"), translate("screens.SignUp.weVeResentTheConfirmationLinkToYourEmail"));
       setCanResend(false);
       setTimeout(() => setCanResend(true), RESEND_AVAILABLE_AFTER_MS);
     } catch (err) {
       const message =
-        err instanceof ApiError ? err.message : "Something went wrong. Please try again.";
+        err instanceof ApiError ? err.message : translate("screens.SignUp.somethingWentWrongPleaseTryAgain");
       setErrorMessage(message);
     } finally {
       setIsResending(false);
@@ -277,7 +221,7 @@ export default function SignUpScreen({
           <View style={styles.card}>
             <AnimatedLogo size={110} />
 
-            <Text style={styles.title}>Create your account</Text>
+            <Text style={styles.title}>{translate("screens.SignUp.createYourAccount")}</Text>
 
             <View style={styles.stepDots}>
               <View style={[styles.stepDot, step === 1 && styles.stepDotActive]} />
@@ -290,7 +234,7 @@ export default function SignUpScreen({
             <Animated.View style={[styles.stepContent, { opacity: stepOpacity }]}>
               {step === 1 && (
                 <>
-                  <Text style={styles.label}>Full Name</Text>
+                  <Text style={styles.label}>{translate("screens.SignUp.fullName")}</Text>
                   <View
                     style={[
                       styles.inputRow,
@@ -299,7 +243,7 @@ export default function SignUpScreen({
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="Enter your full name"
+                      placeholder={translate("screens.SignUp.enterYourFullName")}
                       placeholderTextColor={COLORS.gray}
                       autoCapitalize="words"
                       autoCorrect={false}
@@ -311,12 +255,10 @@ export default function SignUpScreen({
                     />
                   </View>
                   {touched.fullName && !fullNameValid && (
-                    <Text style={styles.errorText}>
-                      3-150 characters: letters, spaces, hyphens or apostrophes only.
-                    </Text>
+                    <Text style={styles.errorText}>{translate("screens.SignUp.3150CharactersLettersSpacesHyphensOrApostrophesOnly")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Email</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.SignUp.email")}</Text>
                   <View
                     style={[
                       styles.inputRow,
@@ -325,7 +267,7 @@ export default function SignUpScreen({
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="Enter your email"
+                      placeholder={translate("screens.SignUp.enterYourEmail")}
                       placeholderTextColor={COLORS.gray}
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -338,10 +280,10 @@ export default function SignUpScreen({
                     />
                   </View>
                   {touched.email && !emailValid && (
-                    <Text style={styles.errorText}>Enter a valid email address.</Text>
+                    <Text style={styles.errorText}>{translate("screens.SignUp.enterAValidEmailAddress")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Password</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.SignUp.password")}</Text>
                   <View
                     style={[
                       styles.inputRow,
@@ -350,7 +292,7 @@ export default function SignUpScreen({
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="Create a password"
+                      placeholder={translate("screens.SignUp.createAPassword")}
                       placeholderTextColor={COLORS.gray}
                       autoCapitalize="none"
                       secureTextEntry={!showPassword}
@@ -373,12 +315,10 @@ export default function SignUpScreen({
                     </TouchableOpacity>
                   </View>
                   {touched.password && !passwordValid && (
-                    <Text style={styles.errorText}>
-                      At least 8 characters, with an uppercase letter, a lowercase letter, and a digit.
-                    </Text>
+                    <Text style={styles.errorText}>{translate("screens.SignUp.atLeast8CharactersWithAnUppercaseLetterALowercaseLetterAndADigit")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Confirm Password</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.SignUp.confirmPassword")}</Text>
                   <View
                     style={[
                       styles.inputRow,
@@ -389,7 +329,7 @@ export default function SignUpScreen({
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="Re-enter your password"
+                      placeholder={translate("screens.SignUp.reEnterYourPassword")}
                       placeholderTextColor={COLORS.gray}
                       autoCapitalize="none"
                       secureTextEntry={!showConfirmPassword}
@@ -412,7 +352,7 @@ export default function SignUpScreen({
                     </TouchableOpacity>
                   </View>
                   {touched.confirmPassword && !confirmPasswordValid && (
-                    <Text style={styles.errorText}>Passwords do not match.</Text>
+                    <Text style={styles.errorText}>{translate("screens.SignUp.passwordsDoNotMatch")}</Text>
                   )}
 
                   <TouchableOpacity
@@ -422,15 +362,15 @@ export default function SignUpScreen({
                     disabled={!step1Valid}
                     onPress={handleStep1Next}
                   >
-                    <Text style={styles.nextButtonText}>Next</Text>
-                    <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+                    <Text style={styles.nextButtonText}>{translate("screens.SignUp.next")}</Text>
+                    <Ionicons name={i18n.language === "ar" ? "arrow-back" : "arrow-forward"} size={18} color={COLORS.white} />
                   </TouchableOpacity>
                 </>
               )}
 
               {step === 2 && (
                 <>
-                  <Text style={styles.label}>Gender</Text>
+                  <Text style={styles.label}>{translate("screens.SignUp.gender")}</Text>
                   <View style={styles.genderRow}>
                     {GENDER_OPTIONS.map((option) => {
                       const selected = gender === option.value;
@@ -450,29 +390,29 @@ export default function SignUpScreen({
                               selected && styles.genderPillTextSelected,
                             ]}
                           >
-                            {option.label}
+                            {translate(option.label)}
                           </Text>
                         </TouchableOpacity>
                       );
                     })}
                   </View>
                   {genderTouched && !genderValid && (
-                    <Text style={styles.errorText}>Please select a gender.</Text>
+                    <Text style={styles.errorText}>{translate("screens.SignUp.pleaseSelectAGender")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Date of Birth</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.SignUp.dateOfBirth")}</Text>
                   <View
                     style={[styles.inputRow, touched.dob && !dobValid && styles.inputRowError]}
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="DD/MM/YYYY"
+                      placeholder={translate("screens.SignUp.ddMmYyyy")}
                       placeholderTextColor={COLORS.gray}
                       keyboardType="number-pad"
                       maxLength={10}
                       value={dob}
                       onChangeText={(text) => {
-                        const digits = text.replace(/\D/g, "").slice(0, 8);
+                        const digits = normalizeDigits(text).replace(/\D/g, "").slice(0, 8);
                         let formatted = digits;
                         if (digits.length > 4) {
                           formatted = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
@@ -486,9 +426,7 @@ export default function SignUpScreen({
                     <Ionicons name="calendar-outline" size={18} color={COLORS.gray} />
                   </View>
                   {touched.dob && !dobValid && (
-                    <Text style={styles.errorText}>
-                      Enter a valid date (DD/MM/YYYY); you must be at least 13.
-                    </Text>
+                    <Text style={styles.errorText}>{translate("screens.SignUp.enterAValidDateDdMmYyyyYouMustBeAtLeast13")}</Text>
                   )}
 
                   <View style={styles.buttonRow}>
@@ -498,7 +436,7 @@ export default function SignUpScreen({
                       disabled={isLoading}
                       onPress={handleStep2Back}
                     >
-                      <Ionicons name="arrow-back" size={18} color={COLORS.gray} />
+                      <Ionicons name={i18n.language === "ar" ? "arrow-forward" : "arrow-back"} size={18} color={COLORS.gray} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -512,8 +450,8 @@ export default function SignUpScreen({
                       disabled={!step2Valid || isLoading}
                       onPress={handleStep2Next}
                     >
-                      <Text style={styles.nextButtonText}>Create Account</Text>
-                      <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+                      <Text style={styles.nextButtonText}>{translate("screens.SignUp.createAccount")}</Text>
+                      <Ionicons name={i18n.language === "ar" ? "arrow-back" : "arrow-forward"} size={18} color={COLORS.white} />
                     </TouchableOpacity>
                   </View>
                 </>
@@ -524,12 +462,9 @@ export default function SignUpScreen({
                   <View style={styles.confirmIconWrap}>
                     <Ionicons name="mail-open-outline" size={36} color={COLORS.teal} />
                   </View>
-                  <Text style={styles.confirmTitle}>Check your email</Text>
-                  <Text style={styles.confirmSubtitle}>
-                    We sent a confirmation link to{" "}
-                    <Text style={styles.confirmEmail}>{registeredEmail}</Text>. Verify your
-                    email to activate your account.
-                  </Text>
+                  <Text style={styles.confirmTitle}>{translate("screens.SignUp.checkYourEmail")}</Text>
+                  <Text style={styles.confirmSubtitle}>{translate("screens.SignUp.weSentAConfirmationLinkTo")}{" "}
+                    <Text style={styles.confirmEmail}>{registeredEmail}</Text>{translate("screens.SignUp.verifyYourEmailToActivateYourAccount")}</Text>
 
                   {canResend ? (
                     <TouchableOpacity
@@ -539,11 +474,11 @@ export default function SignUpScreen({
                       onPress={handleResend}
                     >
                       <Text style={styles.resendText}>
-                        {isResending ? "Resending..." : "Resend confirmation email"}
+                        {isResending ? translate("common.sending") : translate("screens.SignUp.resendConfirmationEmail")}
                       </Text>
                     </TouchableOpacity>
                   ) : (
-                    <Text style={styles.resendHint}>Didn't get it? You can resend shortly.</Text>
+                    <Text style={styles.resendHint}>{translate("screens.SignUp.didnTGetItYouCanResendShortly")}</Text>
                   )}
 
                   <TouchableOpacity
@@ -552,17 +487,17 @@ export default function SignUpScreen({
                     activeOpacity={0.85}
                     onPress={handleBackToLoginFromStep3}
                   >
-                    <Text style={styles.nextButtonText}>Back to Login</Text>
-                    <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+                    <Text style={styles.nextButtonText}>{translate("screens.SignUp.backToLogin")}</Text>
+                    <Ionicons name={i18n.language === "ar" ? "arrow-back" : "arrow-forward"} size={18} color={COLORS.white} />
                   </TouchableOpacity>
                 </>
               )}
             </Animated.View>
 
             <View style={styles.loginRow}>
-              <Text style={styles.loginText}>Already have an account? </Text>
+              <Text style={styles.loginText}>{translate("screens.SignUp.alreadyHaveAnAccount")} </Text>
               <TouchableOpacity activeOpacity={0.7} onPress={onBackToLogin}>
-                <Text style={styles.loginLink}>Log In</Text>
+                <Text style={styles.loginLink}>{translate("screens.SignUp.logIn")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -570,7 +505,7 @@ export default function SignUpScreen({
         </KeyboardAvoidingView>
       </SafeAreaView>
 
-      {isLoading && <LoadingVideoOverlay text="Creating your account..." />}
+      {isLoading && <LoadingVideoOverlay text={translate("screens.SignUp.creatingYourAccount")} />}
     </LinearGradient>
   );
 }

@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 // Must load before expo-video: on web, expo-video's player class extends
 // globalThis.expo.SharedObject, which this import installs as a side effect.
 import "expo-modules-core";
-import { useVideoPlayer, VideoView } from "expo-video";
+import BrandVideo from "../components/BrandVideo";
 
 const VIDEO_SOURCE = require("../../assets/video/VeLora.mp4");
 const VIDEO_ASPECT_RATIO = 1024 / 576;
@@ -21,30 +21,16 @@ const COLORS = {
 };
 
 export default function SplashVideoScreen({ onFinish }: { onFinish: () => void }) {
-  const player = useVideoPlayer(VIDEO_SOURCE, (p) => {
-    p.muted = true;
-    p.loop = false;
-  });
-
-  useEffect(() => {
-    const subscription = player.addListener("playToEnd", () => {
-      onFinish();
-    });
-    // On web the player has no video element to play() until VideoView
-    // below has mounted and registered with it, which happens just before
-    // this effect runs (child effects commit before parent effects).
-    player.play();
-    return () => subscription.remove();
-  }, [player, onFinish]);
+  useEffect(() => { const timer = setTimeout(onFinish, 20000); return () => clearTimeout(timer); }, [onFinish]);
 
   return (
     <View style={styles.container}>
-      <VideoView
+      <BrandVideo
         style={styles.video}
-        player={player}
+        source={VIDEO_SOURCE} onFinish={onFinish}
         contentFit="cover"
-        nativeControls={false}
-        allowsFullscreen={false}
+        
+        
       />
     </View>
   );

@@ -1,5 +1,7 @@
+import { translate } from "../localization/core";
 import React from "react";
-import { KeyboardTypeOptions, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardTypeOptions, StyleSheet, View } from "react-native";
+import { Text, TextInput } from "./LocalizedText";
 
 const COLORS = {
   black: "#1A1A1A",

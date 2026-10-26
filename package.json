@@ -6,27 +6,37 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "^54.0.0",
+    "expo-asset": "~12.0.14",
     "expo-font": "~14.0.12",
     "expo-linear-gradient": "~15.0.8",
+    "expo-localization": "~17.0.9",
     "expo-status-bar": "~3.0.9",
+    "expo-updates": "~29.0.20",
     "expo-video": "~3.0.16",
+    "i18next": "^26.5.11",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-i18next": "^17.1.9",
     "react-native": "0.81.5",
     "react-native-web": "^0.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
+    "@playwright/test": "^1.64.1",
     "@types/react": "~19.1.10",
     "babel-preset-expo": "~54.0.10",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vitest": "^5.0.5"
   },
   "private": true
 }

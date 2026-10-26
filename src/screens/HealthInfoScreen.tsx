@@ -1,18 +1,8 @@
-import React, { useMemo, useRef, useState } from "react";
+import { translate, i18n, medicalNumber } from "../localization/core";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Animated,
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  Animated, Dimensions, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text, TextInput } from "../components/LocalizedText";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import AnimatedLogo from "../components/AnimatedLogo";
@@ -23,6 +13,7 @@ import {
   ApiError,
   completeOnboarding,
   submitBodyInfo,
+  getUserHealthProfile, getDiseaseCatalog, activityLevelFromLabel, stressLevelFromLabel,
   submitDiseases,
   submitFamilyHistory,
   type ActivityLevel,
@@ -53,7 +44,7 @@ const COLORS = {
 
 function numberInRange(value: string, min: number, max: number): boolean {
   if (value.trim() === "") return false;
-  const num = Number(value);
+  const num = medicalNumber(value);
   return Number.isFinite(num) && num >= min && num <= max;
 }
 
@@ -63,35 +54,35 @@ const WEIGHT_MIN = 20;
 const WEIGHT_MAX = 300;
 const WAIST_MIN = 30;
 const WAIST_MAX = 200;
-const SLEEP_MIN = 0;
+const SLEEP_MIN = 1;
 const SLEEP_MAX = 24;
 const WATER_MIN = 0;
 const WATER_MAX = 15;
 
 const ACTIVITY_OPTIONS: { value: ActivityLevel; label: string }[] = [
-  { value: "Sedentary", label: "Sedentary" },
-  { value: "Light", label: "Light" },
-  { value: "Moderate", label: "Moderate" },
-  { value: "Active", label: "Active" },
-  { value: "VeryActive", label: "Very Active" },
+  { value: "Sedentary", label: "screens.HealthInfo.sedentary" },
+  { value: "Light", label: "screens.HealthInfo.light" },
+  { value: "Moderate", label: "screens.HealthInfo.moderate" },
+  { value: "Active", label: "screens.HealthInfo.active" },
+  { value: "VeryActive", label: "screens.HealthInfo.veryActive" },
 ];
 
 const STRESS_OPTIONS: { value: StressLevel; label: string }[] = [
-  { value: "Low", label: "Low" },
-  { value: "Medium", label: "Medium" },
-  { value: "High", label: "High" },
+  { value: "Low", label: "screens.HealthInfo.low" },
+  { value: "Medium", label: "screens.HealthInfo.medium" },
+  { value: "High", label: "screens.HealthInfo.high" },
 ];
 
 const DISEASE_OPTIONS: { value: DiseaseType; label: string }[] = [
-  { value: "diabetes", label: "Diabetes" },
-  { value: "hypertension", label: "Hypertension" },
-  { value: "dyslipidemia", label: "Dyslipidemia" },
-  { value: "insulinResistance", label: "Insulin Resistance" },
+  { value: "type_2_diabetes", label: "screens.HealthInfo.type2Diabetes" },
+  { value: "hypertension", label: "screens.HealthInfo.hypertension" },
+  { value: "hypercholesterolemia", label: "screens.HealthInfo.hypercholesterolemia" },
+  { value: "insulin_resistance", label: "screens.HealthInfo.insulinResistance" },
 ];
 
 const RELATION_OPTIONS: { value: FamilyRelation; label: string }[] = [
-  { value: "mother", label: "Mother" },
-  { value: "father", label: "Father" },
+  { value: "mother", label: "screens.HealthInfo.mother" },
+  { value: "father", label: "screens.HealthInfo.father" },
 ];
 
 function familyKey(disease: DiseaseType, relation: FamilyRelation): string {
@@ -137,6 +128,17 @@ export default function HealthInfoScreen({
 
   const [familyEntries, setFamilyEntries] = useState<Set<string>>(new Set());
   const [noFamilyHistory, setNoFamilyHistory] = useState(false);
+
+  const [availableConditions, setAvailableConditions] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    getDiseaseCatalog().then(rows => setAvailableConditions(new Set(rows.map(row => row.code).filter((code): code is string => Boolean(code))))).catch(handleApiError);
+    if (initialStep > 1) getUserHealthProfile().then(p => {
+      if (!p) { setStep(1); return; }
+      setHeight(String(p.heightCm)); setWeight(String(p.weightKg)); setWaist(String(p.waistCircumferenceCm));
+      setActivityLevel(activityLevelFromLabel(p.activityLevel)); setStressLevel(stressLevelFromLabel(p.stressLevel));
+      setSleepHours(String(p.sleepHours)); setWaterIntake(String(p.waterIntakeLitersPerDay)); setIsSmoker(p.isSmoker);
+    }).catch(handleApiError);
+  }, []);
 
   const step1NextRef = useRef<View>(null);
   const step2NextRef = useRef<View>(null);
@@ -225,7 +227,7 @@ export default function HealthInfoScreen({
 
   const handleApiError = (err: unknown) => {
     const message =
-      err instanceof ApiError ? err.message : "Something went wrong. Please try again.";
+      err instanceof ApiError ? err.message : translate("screens.HealthInfo.somethingWentWrongPleaseTryAgain");
     setErrorMessage(message);
   };
 
@@ -248,12 +250,12 @@ export default function HealthInfoScreen({
     setIsSubmitting(true);
     try {
       await submitBodyInfo({
-        heightCm: Number(height),
-        weightKg: Number(weight),
-        waistCircumferenceCm: Number(waist),
+        heightCm: medicalNumber(height),
+        weightKg: medicalNumber(weight),
+        waistCircumferenceCm: medicalNumber(waist),
         activityLevel,
-        sleepHours: Number(sleepHours),
-        waterIntakeLitersPerDay: Number(waterIntake),
+        sleepHours: medicalNumber(sleepHours),
+        waterIntakeLitersPerDay: medicalNumber(waterIntake),
         isSmoker,
         stressLevel,
       });
@@ -270,34 +272,22 @@ export default function HealthInfoScreen({
     goToStep(2);
   };
 
-  // Diseases and Family History live on one card now, so both submit
-  // together on this single "Finish" press. "None of these apply to me" /
-  // "No known family history" each have nothing to persist — an empty list
-  // is exactly the kind of value a [Required]/[MinLength(1)] server-side
-  // check on the array itself would reject, so those calls are skipped
-  // entirely rather than risking an empty array the server won't accept.
-  // completeOnboarding() is a separate, required action call — without it
-  // the backend keeps returning requiresProfileCompletion: true on every
-  // future login even though all step data was submitted (confirmed live:
-  // a user who finished every step still got sent back to step 1 on their
-  // next login, before this call was added). It also requires the same
-  // Body Info/Lifestyle fields as submitBodyInfo — if a login resumed
-  // straight at step 3 (skipping 1 and 2), those fields are still blank
-  // locally, so this call would fail with a confusing validation error;
-  // catch that case up front instead.
+  // Finalize with actual disease IDs; the backend owns AI generation and returns a refreshed token.
   const handleStep3Next = async () => {
     if (!step3Valid || isSubmitting) return;
     if (!step1Valid || !step2Valid || !activityLevel || !stressLevel || isSmoker === null) {
       setErrorMessage(
-        "Please go back and re-enter your Body Info and Lifestyle details first."
+        translate("screens.HealthInfo.pleaseGoBackAndReEnterYourBodyInfoAndLifestyleDetailsFirst")
       );
       return;
     }
     setIsSubmitting(true);
     try {
-      if (!noDiseases) {
-        await submitDiseases({ diseases: Array.from(selectedDiseases) });
-      }
+      // Optional family history is saved after finalization: its existing controller requires ProfileCompleted.
+      await completeOnboarding({
+        heightCm: medicalNumber(height), weightKg: medicalNumber(weight), waistCircumferenceCm: medicalNumber(waist),
+        activityLevel, sleepHours: medicalNumber(sleepHours), waterIntakeLitersPerDay: medicalNumber(waterIntake), isSmoker, stressLevel,
+      }, noDiseases ? [] : Array.from(selectedDiseases));
       if (!noFamilyHistory) {
         const entries = Array.from(familyEntries).map((key) => {
           const [disease, relation] = key.split("|") as [DiseaseType, FamilyRelation];
@@ -305,16 +295,6 @@ export default function HealthInfoScreen({
         });
         await submitFamilyHistory({ entries });
       }
-      await completeOnboarding({
-        heightCm: Number(height),
-        weightKg: Number(weight),
-        waistCircumferenceCm: Number(waist),
-        activityLevel,
-        sleepHours: Number(sleepHours),
-        waterIntakeLitersPerDay: Number(waterIntake),
-        isSmoker,
-        stressLevel,
-      });
       step3NextRef.current?.measureInWindow((x, y, w, h) => {
         onNext?.({ x: x + w / 2, y: y + h / 2 });
       });
@@ -347,10 +327,8 @@ export default function HealthInfoScreen({
           <View style={styles.card}>
             <AnimatedLogo size={100} />
 
-            <Text style={styles.title}>Tell us about your health</Text>
-            <Text style={styles.subtitle}>
-              This helps us personalize your recommendations.
-            </Text>
+            <Text style={styles.title}>{translate("screens.HealthInfo.tellUsAboutYourHealth")}</Text>
+            <Text style={styles.subtitle}>{translate("screens.HealthInfo.thisHelpsUsPersonalizeYourRecommendations")}</Text>
 
             <View style={styles.stepDots}>
               <View style={[styles.stepDot, step === 1 && styles.stepDotActive]} />
@@ -363,13 +341,13 @@ export default function HealthInfoScreen({
             <Animated.View style={[styles.stepContent, { opacity: stepOpacity }]}>
               {step === 1 && (
                 <>
-                  <Text style={styles.label}>Height (cm)</Text>
+                  <Text style={styles.label}>{translate("screens.HealthInfo.heightCm")}</Text>
                   <View
                     style={[styles.inputRow, touched.height && !heightValid && styles.inputRowError]}
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="e.g. 170"
+                      placeholder={translate("screens.HealthInfo.eG170")}
                       placeholderTextColor={COLORS.gray}
                       keyboardType="decimal-pad"
                       value={height}
@@ -380,16 +358,16 @@ export default function HealthInfoScreen({
                     />
                   </View>
                   {touched.height && !heightValid && (
-                    <Text style={styles.errorText}>Enter a height between {HEIGHT_MIN}-{HEIGHT_MAX} cm.</Text>
+                    <Text style={styles.errorText}>{translate("validation.range", {min: HEIGHT_MIN, max: HEIGHT_MAX, unit: "cm"})}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Weight (kg)</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.HealthInfo.weightKg")}</Text>
                   <View
                     style={[styles.inputRow, touched.weight && !weightValid && styles.inputRowError]}
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="e.g. 68"
+                      placeholder={translate("screens.HealthInfo.eG68")}
                       placeholderTextColor={COLORS.gray}
                       keyboardType="decimal-pad"
                       value={weight}
@@ -400,16 +378,16 @@ export default function HealthInfoScreen({
                     />
                   </View>
                   {touched.weight && !weightValid && (
-                    <Text style={styles.errorText}>Enter a weight between {WEIGHT_MIN}-{WEIGHT_MAX} kg.</Text>
+                    <Text style={styles.errorText}>{translate("validation.range", {min: WEIGHT_MIN, max: WEIGHT_MAX, unit: "kg"})}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Waist Circumference (cm)</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.HealthInfo.waistCircumferenceCm")}</Text>
                   <View
                     style={[styles.inputRow, touched.waist && !waistValid && styles.inputRowError]}
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="e.g. 80"
+                      placeholder={translate("screens.HealthInfo.eG80")}
                       placeholderTextColor={COLORS.gray}
                       keyboardType="decimal-pad"
                       value={waist}
@@ -420,10 +398,10 @@ export default function HealthInfoScreen({
                     />
                   </View>
                   {touched.waist && !waistValid && (
-                    <Text style={styles.errorText}>Enter a waist size between {WAIST_MIN}-{WAIST_MAX} cm.</Text>
+                    <Text style={styles.errorText}>{translate("validation.range", {min: WAIST_MIN, max: WAIST_MAX, unit: "cm"})}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Activity Level</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.HealthInfo.activityLevel")}</Text>
                   <View style={styles.pillWrap}>
                     {ACTIVITY_OPTIONS.map((option) => {
                       const selected = activityLevel === option.value;
@@ -438,14 +416,14 @@ export default function HealthInfoScreen({
                           }}
                         >
                           <Text style={[styles.pillText, selected && styles.pillTextSelected]}>
-                            {option.label}
+                            {translate(option.label)}
                           </Text>
                         </TouchableOpacity>
                       );
                     })}
                   </View>
                   {activityTouched && !activityValid && (
-                    <Text style={styles.errorText}>Please select an activity level.</Text>
+                    <Text style={styles.errorText}>{translate("screens.HealthInfo.pleaseSelectAnActivityLevel")}</Text>
                   )}
 
                   <TouchableOpacity
@@ -455,21 +433,21 @@ export default function HealthInfoScreen({
                     disabled={!step1Valid || isSubmitting}
                     onPress={handleStep1Next}
                   >
-                    <Text style={styles.nextButtonText}>Next</Text>
-                    <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+                    <Text style={styles.nextButtonText}>{translate("screens.HealthInfo.next")}</Text>
+                    <Ionicons name={i18n.language === "ar" ? "arrow-back" : "arrow-forward"} size={18} color={COLORS.white} />
                   </TouchableOpacity>
                 </>
               )}
 
               {step === 2 && (
                 <>
-                  <Text style={styles.label}>Sleep Hours (per night)</Text>
+                  <Text style={styles.label}>{translate("screens.HealthInfo.sleepHoursPerNight")}</Text>
                   <View
                     style={[styles.inputRow, touched.sleepHours && !sleepValid && styles.inputRowError]}
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="e.g. 7.5"
+                      placeholder={translate("screens.HealthInfo.eG75")}
                       placeholderTextColor={COLORS.gray}
                       keyboardType="decimal-pad"
                       value={sleepHours}
@@ -480,10 +458,10 @@ export default function HealthInfoScreen({
                     />
                   </View>
                   {touched.sleepHours && !sleepValid && (
-                    <Text style={styles.errorText}>Enter hours between {SLEEP_MIN}-{SLEEP_MAX}.</Text>
+                    <Text style={styles.errorText}>{translate("validation.range", {min: SLEEP_MIN, max: SLEEP_MAX, unit: "h"})}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Stress Level</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.HealthInfo.stressLevel")}</Text>
                   <View style={styles.pillWrap}>
                     {STRESS_OPTIONS.map((option) => {
                       const selected = stressLevel === option.value;
@@ -498,21 +476,21 @@ export default function HealthInfoScreen({
                           }}
                         >
                           <Text style={[styles.pillText, selected && styles.pillTextSelected]}>
-                            {option.label}
+                            {translate(option.label)}
                           </Text>
                         </TouchableOpacity>
                       );
                     })}
                   </View>
                   {stressTouched && !stressValid && (
-                    <Text style={styles.errorText}>Please select a stress level.</Text>
+                    <Text style={styles.errorText}>{translate("screens.HealthInfo.pleaseSelectAStressLevel")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Do you smoke?</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.HealthInfo.doYouSmoke")}</Text>
                   <View style={styles.genderRow}>
                     {[
-                      { value: true, label: "Yes" },
-                      { value: false, label: "No" },
+                      { value: true, label: "screens.HealthInfo.yes" },
+                      { value: false, label: "screens.HealthInfo.no" },
                     ].map((option) => {
                       const selected = isSmoker === option.value;
                       return (
@@ -526,23 +504,23 @@ export default function HealthInfoScreen({
                           }}
                         >
                           <Text style={[styles.pillText, selected && styles.pillTextSelected]}>
-                            {option.label}
+                            {translate(option.label)}
                           </Text>
                         </TouchableOpacity>
                       );
                     })}
                   </View>
                   {smokerTouched && !smokerValid && (
-                    <Text style={styles.errorText}>Please select an option.</Text>
+                    <Text style={styles.errorText}>{translate("screens.HealthInfo.pleaseSelectAnOption")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>Water Intake (liters/day)</Text>
+                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.HealthInfo.waterIntakeLitersDay")}</Text>
                   <View
                     style={[styles.inputRow, touched.waterIntake && !waterValid && styles.inputRowError]}
                   >
                     <TextInput
                       style={styles.input}
-                      placeholder="e.g. 2.5"
+                      placeholder={translate("screens.HealthInfo.eG25")}
                       placeholderTextColor={COLORS.gray}
                       keyboardType="decimal-pad"
                       value={waterIntake}
@@ -553,7 +531,7 @@ export default function HealthInfoScreen({
                     />
                   </View>
                   {touched.waterIntake && !waterValid && (
-                    <Text style={styles.errorText}>Enter liters between {WATER_MIN}-{WATER_MAX}.</Text>
+                    <Text style={styles.errorText}>{translate("validation.range", {min: WATER_MIN, max: WATER_MAX, unit: "L"})}</Text>
                   )}
 
                   <View style={styles.buttonRow}>
@@ -563,7 +541,7 @@ export default function HealthInfoScreen({
                       disabled={isSubmitting}
                       onPress={handleStep2Back}
                     >
-                      <Ionicons name="arrow-back" size={18} color={COLORS.gray} />
+                      <Ionicons name={i18n.language === "ar" ? "arrow-forward" : "arrow-back"} size={18} color={COLORS.gray} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -577,8 +555,8 @@ export default function HealthInfoScreen({
                       disabled={!step2Valid || isSubmitting}
                       onPress={handleStep2Next}
                     >
-                      <Text style={styles.nextButtonText}>Next</Text>
-                      <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+                      <Text style={styles.nextButtonText}>{translate("screens.HealthInfo.next")}</Text>
+                      <Ionicons name={i18n.language === "ar" ? "arrow-back" : "arrow-forward"} size={18} color={COLORS.white} />
                     </TouchableOpacity>
                   </View>
                 </>
@@ -586,11 +564,9 @@ export default function HealthInfoScreen({
 
               {step === 3 && (
                 <>
-                  <Text style={styles.label}>
-                    Do you currently have any of these conditions?
-                  </Text>
+                  <Text style={styles.label}>{translate("screens.HealthInfo.doYouCurrentlyHaveAnyOfTheseConditions")}</Text>
                   <View style={styles.pillWrap}>
-                    {DISEASE_OPTIONS.map((option) => {
+                    {DISEASE_OPTIONS.filter(option => availableConditions.has(option.value)).map((option) => {
                       const selected = selectedDiseases.has(option.value);
                       return (
                         <TouchableOpacity
@@ -600,7 +576,7 @@ export default function HealthInfoScreen({
                           onPress={() => toggleDisease(option.value)}
                         >
                           <Text style={[styles.pillText, selected && styles.pillTextSelected]}>
-                            {option.label}
+                            {translate(option.label)}
                           </Text>
                         </TouchableOpacity>
                       );
@@ -617,27 +593,21 @@ export default function HealthInfoScreen({
                       size={18}
                       color={noDiseases ? COLORS.teal : COLORS.gray}
                     />
-                    <Text style={[styles.noneRowText, noDiseases && styles.noneRowTextSelected]}>
-                      None of these apply to me
-                    </Text>
+                    <Text style={[styles.noneRowText, noDiseases && styles.noneRowTextSelected]}>{translate("screens.HealthInfo.noneOfTheseApplyToMe")}</Text>
                   </TouchableOpacity>
 
                   <View style={styles.sectionDivider} />
 
-                  <Text style={styles.label}>
-                    Has anyone in your immediate family had these conditions?
-                  </Text>
+                  <Text style={styles.label}>{translate("screens.HealthInfo.hasAnyoneInYourImmediateFamilyHadTheseConditions")}</Text>
 
                   {selectedDiseases.size === 0 ? (
-                    <Text style={styles.hintText}>
-                      Select a condition above to add family history for it.
-                    </Text>
+                    <Text style={styles.hintText}>{translate("screens.HealthInfo.selectAConditionAboveToAddFamilyHistoryForIt")}</Text>
                   ) : (
                     <>
                       {DISEASE_OPTIONS.filter((disease) => selectedDiseases.has(disease.value)).map(
                         (disease) => (
                           <View key={disease.value} style={styles.familyRow}>
-                            <Text style={styles.familyRowLabel}>{disease.label}</Text>
+                            <Text style={styles.familyRowLabel}>{translate(disease.label)}</Text>
                             <View style={styles.familyRelationRow}>
                               {RELATION_OPTIONS.map((relation) => {
                                 const key = familyKey(disease.value, relation.value);
@@ -652,7 +622,7 @@ export default function HealthInfoScreen({
                                     <Text
                                       style={[styles.pillText, selected && styles.pillTextSelected]}
                                     >
-                                      {relation.label}
+                                      {translate(relation.label)}
                                     </Text>
                                   </TouchableOpacity>
                                 );
@@ -674,9 +644,7 @@ export default function HealthInfoScreen({
                         />
                         <Text
                           style={[styles.noneRowText, noFamilyHistory && styles.noneRowTextSelected]}
-                        >
-                          No known family history of these conditions
-                        </Text>
+                        >{translate("screens.HealthInfo.noKnownFamilyHistoryOfTheseConditions")}</Text>
                       </TouchableOpacity>
                     </>
                   )}
@@ -688,7 +656,7 @@ export default function HealthInfoScreen({
                       disabled={isSubmitting}
                       onPress={handleStep3Back}
                     >
-                      <Ionicons name="arrow-back" size={18} color={COLORS.gray} />
+                      <Ionicons name={i18n.language === "ar" ? "arrow-forward" : "arrow-back"} size={18} color={COLORS.gray} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -702,7 +670,7 @@ export default function HealthInfoScreen({
                       disabled={!step3Valid || isSubmitting}
                       onPress={handleStep3Next}
                     >
-                      <Text style={styles.nextButtonText}>Finish</Text>
+                      <Text style={styles.nextButtonText}>{translate("screens.HealthInfo.finish")}</Text>
                       <Ionicons name="checkmark" size={18} color={COLORS.white} />
                     </TouchableOpacity>
                   </View>
@@ -714,7 +682,7 @@ export default function HealthInfoScreen({
         </KeyboardAvoidingView>
       </SafeAreaView>
 
-      {isSubmitting && <LoadingVideoOverlay text="Saving..." />}
+      {isSubmitting && <LoadingVideoOverlay text={translate("screens.HealthInfo.saving")} />}
     </LinearGradient>
   );
 }

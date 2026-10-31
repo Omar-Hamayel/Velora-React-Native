@@ -1,3 +1,5 @@
+> SDK update 31 October 2026: the existing mobile app is now Expo SDK 58.0.22. The26 October setup/test evidence below is historical; startup paths/ports remain valid. Restart Metro with --clear and rebuild a custom native client for SDK58. See SDK58_UPGRADE.md for current version-specific checks.
+
 # Local end-to-end setup
 
 Existing projects only. Verified26 October2026 on Windows, Expo54/ReactNative0.81.5, Node24, Python3.14, .NET9 targets, SQLServer LocalDB. All test data is synthetic. Do not run migrations against a real/production database or reuse real SMTP credentials for the fixture.

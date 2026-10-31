@@ -249,7 +249,7 @@ export default function ProfileScreen({
 
   return (
     <View style={styles.outer}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <StatusBar barStyle="light-content" />
       <View style={styles.safeArea}>
         <ScrollView
           showsVerticalScrollIndicator={false}

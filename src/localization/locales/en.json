@@ -13,7 +13,9 @@
     "login": "Log in",
     "register": "Create account",
     "confirmEmail": "Please confirm your email before logging in.",
-    "invalidLogin": "Incorrect email or password."
+    "invalidLogin": "Incorrect email or password.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "home": {
     "welcome": "Welcome",
@@ -29,7 +31,9 @@
     "arabic": "Arabic",
     "syncFailed": "Saved on this device. Account sync failed; select again to retry.",
     "restart": "Restart to apply layout direction",
-    "restartManually": "Close and reopen the app to apply its layout direction."
+    "restartManually": "Close and reopen the app to apply its layout direction.",
+    "changeLanguage": "Change language",
+    "chooseLanguage": "App language"
   },
   "recommendations": {
     "title": "Recommendations",
@@ -493,8 +497,8 @@
       "yourHealthOurPriority": "\"Your Health, Our Priority\"",
       "heyWelcomeBack": "Hey, Welcome back!",
       "gladToSeeYouAgain": "Glad to see you, Again!",
-      "emailOrPhoneNumber": "Email or Phone Number",
-      "enterEmailOrPhoneNumber": "Enter email or phone number",
+      "emailOrPhoneNumber": "Email address",
+      "enterEmailOrPhoneNumber": "Enter your email",
       "password": "Password",
       "enterYourPassword": "Enter your password",
       "resendConfirmationEmail": "Resend Confirmation Email",
@@ -504,7 +508,8 @@
       "donTHaveAnAccount": "Don't have an account?",
       "signUp": "Sign Up",
       "needHelp": "Need Help?",
-      "loading": "Loading..."
+      "loading": "Loading...",
+      "signInTitle": "Sign in"
     },
     "BottomNav": {
       "home": "Home",

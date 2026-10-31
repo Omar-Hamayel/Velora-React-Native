@@ -160,7 +160,7 @@ export default function BloodPressureScreen({
 
   return (
     <View style={styles.outer}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" />
       <View style={styles.safeArea}>
         <View style={styles.header}>
           <TouchableOpacity

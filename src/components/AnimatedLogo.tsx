@@ -52,7 +52,7 @@ export default function AnimatedLogo({ size = 96 }: { size?: number }) {
             player={player}
             contentFit="contain"
             nativeControls={false}
-            allowsFullscreen={false}
+            fullscreenOptions={{ enable: false }}
           />
         </Animated.View>
       )}
@@ -67,7 +67,7 @@ export default function AnimatedLogo({ size = 96 }: { size?: number }) {
 
 const styles = StyleSheet.create({
   layer: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   fill: {
     width: "100%",

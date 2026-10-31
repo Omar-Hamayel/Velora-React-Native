@@ -1,3 +1,4 @@
+import type { ViewInstance } from "react-native";
 import { translate, i18n, medicalNumber } from "../localization/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -140,9 +141,9 @@ export default function HealthInfoScreen({
     }).catch(handleApiError);
   }, []);
 
-  const step1NextRef = useRef<View>(null);
-  const step2NextRef = useRef<View>(null);
-  const step3NextRef = useRef<View>(null);
+  const step1NextRef = useRef<ViewInstance>(null);
+  const step2NextRef = useRef<ViewInstance>(null);
+  const step3NextRef = useRef<ViewInstance>(null);
 
   const heightValid = useMemo(() => numberInRange(height, HEIGHT_MIN, HEIGHT_MAX), [height]);
   const weightValid = useMemo(() => numberInRange(weight, WEIGHT_MIN, WEIGHT_MAX), [weight]);

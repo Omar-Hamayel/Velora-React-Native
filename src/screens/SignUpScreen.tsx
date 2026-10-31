@@ -1,3 +1,4 @@
+import type { ViewInstance } from "react-native";
 import { translate, i18n, normalizeDigits } from "../localization/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -96,9 +97,9 @@ export default function SignUpScreen({
   const [registeredEmail, setRegisteredEmail] = useState("");
   const [canResend, setCanResend] = useState(false);
   const [isResending, setIsResending] = useState(false);
-  const step1NextRef = useRef<View>(null);
-  const step2NextRef = useRef<View>(null);
-  const step3NextRef = useRef<View>(null);
+  const step1NextRef = useRef<ViewInstance>(null);
+  const step2NextRef = useRef<ViewInstance>(null);
+  const step3NextRef = useRef<ViewInstance>(null);
 
   const fullNameValid = useMemo(() => FULL_NAME_REGEX.test(fullName.trim()), [fullName]);
   const emailValid = useMemo(() => EMAIL_REGEX.test(email), [email]);

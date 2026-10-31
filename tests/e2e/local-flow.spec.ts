@@ -22,7 +22,7 @@ for(const language of ["en","ar"] as const) test(`real ${language} registration,
   const email=`mobile-${language}-${Date.now()}@example.invalid`,password="SyntheticMobile1";
   await page.goto("/");await expect(page.locator("video")).toHaveCount(0,{timeout:45000});
   await click(page,"Get Started");
-  if(language==="ar")await click(page,"العربية");
+  if(language==="ar") { await page.getByRole("button",{name:"Change language",exact:true}).click(); await page.getByRole("radio",{name:"العربية",exact:true}).click(); }
   await expect(page.locator("html")).toHaveAttribute("dir",language==="ar"?"rtl":"ltr");
   const en=language==="en";
   await click(page,en?"Sign Up":"إنشاء حساب");
@@ -44,7 +44,7 @@ for(const language of ["en","ar"] as const) test(`real ${language} registration,
   const verified=await request.get(backend+"/api/Identity/Auth/confirm-email",{params:{UserId:confirmation.searchParams.get("userId")!,Token:confirmation.searchParams.get("token")!}});
   expect(verified.status()).toBe(200); // real Identity confirmation token received over local SMTP, no database bypass
   await click(page,en?"Back to Login":"العودة لتسجيل الدخول");
-  await page.getByPlaceholder(en?"Enter email or phone number":"أدخل البريد الإلكتروني").fill(email);
+  await page.getByPlaceholder(en?"Enter your email":"أدخل البريد الإلكتروني").fill(email);
   await page.getByPlaceholder(en?"Enter your password":"أدخل كلمة المرور").fill(password);
   await click(page,en?"Continue":"متابعة");
   await expect(page.getByText(en?"Tell us about your health":"أخبرنا عن صحتك",{exact:true})).toBeVisible();
@@ -76,7 +76,8 @@ for(const language of ["en","ar"] as const) test(`real ${language} registration,
   await page.screenshot({path:path.join(evidence!,`home-${language}.png`),fullPage:true});
   await click(page,en?"Profile":"الملف الشخصي");
   const langRequest=page.waitForResponse(r=>r.url().endsWith("/User/preferences")&&r.request().method()==="PATCH");
-  await click(page,en?"العربية":"English");expect((await langRequest).status()).toBe(200);
+  await page.getByRole("button",{name:en?"Change language":"تغيير اللغة",exact:true}).click();
+  await page.getByRole("radio",{name:en?"العربية":"English",exact:true}).click();expect((await langRequest).status()).toBe(200);
   expect(dbSnapshot(userId)).toBe(before);
   const after=await (await request.get(backend+"/api/AI/recommendations/latest",{headers})).json();expect(after).toEqual(feedbackRows);
   await expect(page.locator("html")).toHaveAttribute("dir",en?"rtl":"ltr");

@@ -81,7 +81,7 @@ export default function HomeScreen({
   const userName = getCurrentUser()?.fullName || "there";
   return (
     <View style={styles.outer}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <StatusBar barStyle="light-content" />
       <View style={styles.safeArea}>
         <ScrollView
           showsVerticalScrollIndicator={false}

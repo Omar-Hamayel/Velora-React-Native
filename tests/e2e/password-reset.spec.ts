@@ -21,7 +21,7 @@ for(const language of ["en","ar"] as const) test(`forgot-password ${language}: v
   expect((await request.get(backend+"/api/Identity/Auth/confirm-email",{params:{UserId:confirm.searchParams.get("userId")!,Token:confirm.searchParams.get("token")!}})).status()).toBe(200);
   await page.goto("/");await expect(page.locator("video")).toHaveCount(0,{timeout:45000});
   await page.getByText("Get Started",{exact:true}).click();await page.waitForTimeout(1500);
-  if(language==="ar")await page.getByText("العربية",{exact:true}).click();
+  if(language==="ar") { await page.getByRole("button",{name:"Change language",exact:true}).click(); await page.getByRole("radio",{name:"العربية",exact:true}).click(); }
   const locale=JSON.parse(fs.readFileSync(path.join(process.cwd(),`src/localization/locales/${language}.json`),"utf8"));
   const copy=locale.screens.Welcome;
   let forgotCalls=0;page.on("request",r=>{if(r.url().endsWith("/forgot-password"))forgotCalls++;});

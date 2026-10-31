@@ -103,7 +103,7 @@ export default function LoadingVideoOverlay({
 
 const styles = StyleSheet.create({
   overlayWrap: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     zIndex: 10,
   },
   overlay: {

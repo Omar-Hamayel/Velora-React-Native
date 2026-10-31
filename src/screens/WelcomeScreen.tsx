@@ -1,6 +1,8 @@
+import type { ViewInstance } from "react-native";
 import { translate } from "../localization/core";
 import LanguageSelector from "../components/LanguageSelector";
 import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text, TextInput } from "../components/LocalizedText";
@@ -12,12 +14,8 @@ import { ApiError, forgotPassword, login, resendConfirmationEmail } from "../api
 
 const MAX_CONTENT_WIDTH = 430;
 const { height: windowHeight } = Dimensions.get("window");
-// Sized so the header + sheet together fit within one screen with no
-// scrolling — the sheet's content no longer has anywhere else to overflow to.
-// The sheet below has its paddings trimmed to compensate for the extra
-// height this claims.
-const headerHeight = windowHeight * 0.52;
-const SHEET_OVERLAP = 40;
+const headerHeight = Math.min(400, Math.max(260, Math.round(windowHeight * 0.43)));
+const SHEET_OVERLAP = 28;
 
 const COLORS = {
   teal: "#14919B",
@@ -39,6 +37,8 @@ export default function WelcomeScreen({
     nextStep?: string | null
   ) => void;
 }) {
+  const { i18n } = useTranslation();
+  const rtl = i18n.language === "ar";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -51,8 +51,8 @@ export default function WelcomeScreen({
   // confirmed yet — showing it unconditionally would offer "resend" before
   // there's any known reason to need it.
   const [showResendLink, setShowResendLink] = useState(false);
-  const signUpRef = useRef<View>(null);
-  const continueRef = useRef<View>(null);
+  const signUpRef = useRef<ViewInstance>(null);
+  const continueRef = useRef<ViewInstance>(null);
 
   const handleForgotPassword = async () => {
     if (isForgotLoading) return;
@@ -148,8 +148,7 @@ export default function WelcomeScreen({
   return (
     <View style={styles.outer}>
       <View style={styles.safeArea}>
-        <StatusBar barStyle="light-content" translucent />
-        <LanguageSelector />
+        <StatusBar barStyle="light-content" />
         <KeyboardAvoidingView
           style={styles.keyboardAvoider}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -167,19 +166,19 @@ export default function WelcomeScreen({
             style={styles.headerImage}
             resizeMode="cover"
           />
-          <View style={styles.quoteWrap}>
-            <Text style={styles.quote}>{translate("screens.Welcome.yourHealthOurPriority")}</Text>
-          </View>
         </View>
 
         <View style={styles.sheet}>
-          <Text style={styles.title}>{translate("screens.Welcome.heyWelcomeBack")}</Text>
-          <Text style={styles.subtitle}>{translate("screens.Welcome.gladToSeeYouAgain")}</Text>
+          <View style={styles.sheetHeading}>
+            <Text style={styles.title}>{translate("screens.Welcome.signInTitle")}</Text>
+            <LanguageSelector compact />
+          </View>
 
           <Text style={styles.label}>{translate("screens.Welcome.emailOrPhoneNumber")}</Text>
           <View style={styles.inputRow}>
+            <Ionicons name="mail-outline" size={18} color="#80938F" />
             <TextInput
-              style={styles.input}
+              style={[styles.input, rtl && !email && styles.emptyInputRTL]}
               placeholder={translate("screens.Welcome.enterEmailOrPhoneNumber")}
               placeholderTextColor={COLORS.gray}
               autoCapitalize="none"
@@ -192,8 +191,9 @@ export default function WelcomeScreen({
 
           <Text style={[styles.label, styles.labelTight]}>{translate("screens.Welcome.password")}</Text>
           <View style={styles.inputRow}>
+            <Ionicons name="lock-closed-outline" size={18} color="#80938F" />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { writingDirection: rtl && !password ? "rtl" : "ltr", textAlign: rtl && !password ? "right" : "left" }]}
               placeholder={translate("screens.Welcome.enterYourPassword")}
               placeholderTextColor={COLORS.gray}
               secureTextEntry={!showPassword}
@@ -202,7 +202,10 @@ export default function WelcomeScreen({
               onChangeText={setPassword}
             />
             <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel={translate(showPassword ? "auth.hidePassword" : "auth.showPassword")}
               onPress={() => setShowPassword((v) => !v)}
+              style={styles.eyeButton}
               hitSlop={8}
               activeOpacity={0.7}
             >
@@ -296,7 +299,7 @@ export default function WelcomeScreen({
 const styles = StyleSheet.create({
   outer: {
     flex: 1,
-    backgroundColor: "#F2F2F2",
+    backgroundColor: COLORS.white,
     alignItems: "center",
   },
   safeArea: {
@@ -319,22 +322,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  quoteWrap: {
-    position: "absolute",
-    top: 56,
-    start: 20,
-    end: 20,
-  },
-  quote: {
-    fontSize: 17,
-    fontStyle: "italic",
-    fontWeight: "700",
-    color: COLORS.white,
-    lineHeight: 22,
-    textShadowColor: "rgba(0,0,0,0.25)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
-  },
   sheet: {
     flex: 1,
     marginTop: -SHEET_OVERLAP,
@@ -342,59 +329,80 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     backgroundColor: COLORS.white,
     paddingHorizontal: 22,
-    paddingTop: 14,
-    paddingBottom: 14,
+    paddingTop: 24,
+    paddingBottom: 24,
+  },
+  sheetHeading: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+    marginBottom: 12,
   },
   title: {
-    fontSize: 21,
+    flex: 1,
+    fontSize: 24,
     fontWeight: "700",
-    color: COLORS.black,
-  },
-  subtitle: {
-    marginTop: 3,
-    fontSize: 13.5,
-    color: COLORS.gray,
+    color: "#173D39",
+    lineHeight: 34,
   },
   label: {
-    marginTop: 12,
-    fontSize: 12.5,
+    marginTop: 14,
+    fontSize: 13.5,
     fontWeight: "600",
     color: COLORS.black,
+    lineHeight: 22,
   },
   labelTight: {
-    marginTop: 8,
+    marginTop: 16,
   },
   inputRow: {
     marginTop: 7,
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1.5,
+    gap: 10,
+    borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 13,
-    paddingHorizontal: 13,
-    height: 46,
+    borderRadius: 14,
+    backgroundColor: "#FAFCFB",
+    paddingHorizontal: 14,
+    height: 52,
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    minWidth: 0,
+    fontSize: 15,
     color: COLORS.black,
     height: "100%",
   },
+  emptyInputRTL: {
+    writingDirection: "rtl",
+    textAlign: "right",
+  },
+  eyeButton: {
+    width: 28,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   linkRow: {
-    marginTop: 6,
+    marginTop: 10,
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
     justifyContent: "space-between",
   },
   linkRowSingle: {
     justifyContent: "flex-end",
   },
   forgotText: {
-    fontSize: 12,
+    fontSize: 12.5,
     fontWeight: "600",
     color: COLORS.teal,
+    lineHeight: 22,
   },
   continueButton: {
-    marginTop: 10,
+    marginTop: 16,
     backgroundColor: COLORS.teal,
     borderRadius: 15,
     paddingVertical: 13,
@@ -410,9 +418,10 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 15,
     fontWeight: "600",
+    lineHeight: 24,
   },
   dividerRow: {
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -423,11 +432,12 @@ const styles = StyleSheet.create({
   },
   dividerText: {
     marginHorizontal: 10,
-    fontSize: 11.5,
+    fontSize: 12,
     color: COLORS.gray,
+    lineHeight: 20,
   },
   socialRow: {
-    marginTop: 8,
+    marginTop: 14,
     flexDirection: "row",
     justifyContent: "center",
     gap: 14,
@@ -451,21 +461,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   signupRow: {
-    marginTop: 8,
+    marginTop: 18,
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 5,
     justifyContent: "center",
   },
   signupText: {
-    fontSize: 12.5,
+    fontSize: 13,
     color: COLORS.gray,
+    lineHeight: 22,
   },
   signupLink: {
-    fontSize: 12.5,
+    fontSize: 13,
     color: COLORS.teal,
     fontWeight: "700",
+    lineHeight: 22,
   },
   helpWrap: {
-    marginTop: 4,
+    marginTop: 12,
     alignItems: "center",
   },
   helpText: {

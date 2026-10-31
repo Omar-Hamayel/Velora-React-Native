@@ -1,3 +1,4 @@
+import type { ViewInstance } from "react-native";
 import { translate } from "../localization/core";
 import React, { useRef } from "react";
 import {
@@ -33,7 +34,7 @@ export default function OnboardingScreen({
 }: {
   onGetStarted?: (origin: ScreenPoint) => void;
 }) {
-  const buttonRef = useRef<View>(null);
+  const buttonRef = useRef<ViewInstance>(null);
 
   const handlePress = () => {
     buttonRef.current?.measureInWindow((x, y, buttonWidth, buttonHeight) => {
@@ -44,7 +45,7 @@ export default function OnboardingScreen({
   return (
     <View style={styles.outer}>
       <View style={styles.safeArea}>
-        <StatusBar barStyle="dark-content" translucent />
+        <StatusBar barStyle="dark-content" />
 
         <LinearGradient
           colors={[COLORS.bgGradientStart, COLORS.bgGradientEnd]}

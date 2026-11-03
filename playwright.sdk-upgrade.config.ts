@@ -6,10 +6,11 @@ export default defineConfig({
   retries: 0,
   timeout: 60000,
   use: {
-    baseURL: "http://127.0.0.1:18083",
+    baseURL: process.env.VELORA_PRESENTATION_URL ?? "http://127.0.0.1:18083",
     channel: "msedge",
     headless: true,
     viewport: { width: 430, height: 932 },
+    timezoneId: "UTC",
     trace: "off",
     screenshot: "only-on-failure",
   },

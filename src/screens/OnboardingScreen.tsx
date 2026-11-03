@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   heading: {
+    width: "100%",
     fontSize: 32,
     fontWeight: "700",
     color: COLORS.black,
@@ -178,6 +179,7 @@ const styles = StyleSheet.create({
     color: COLORS.teal,
   },
   description: {
+    width: "100%",
     marginTop: 18,
     fontSize: 17,
     lineHeight: 25,

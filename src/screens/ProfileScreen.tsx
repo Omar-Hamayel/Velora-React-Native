@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import BottomNav from "../components/BottomNav";
 import ErrorBanner from "../components/ErrorBanner";
+import UserConditions from "../components/UserConditions";
 import type { ScreenPoint } from "./OnboardingScreen";
 import {
   ApiError,
@@ -400,6 +401,8 @@ export default function ProfileScreen({
               )}
             </View>
 
+            <UserConditions />
+
             {/* Health Records */}
             <View style={[styles.card, styles.menuCard]}>
               <Text style={styles.cardTitle}>{translate("screens.Profile.healthRecords")}</Text>
@@ -488,7 +491,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: 36,
   },
   header: {
     paddingTop: HEADER_TOP_INSET,
@@ -524,12 +527,16 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gradientStart,
   },
   userName: {
+    width: "100%",
+    textAlign: "center",
     marginTop: 12,
     fontSize: 19,
     fontWeight: "700",
     color: COLORS.white,
   },
   userEmail: {
+    width: "100%",
+    textAlign: "center",
     marginTop: 3,
     fontSize: 12.5,
     color: "rgba(255,255,255,0.85)",
@@ -566,7 +573,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   infoCard: {
-    marginTop: 16,
+    marginTop: 22,
   },
   infoRow: {
     marginTop: 14,
@@ -677,7 +684,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   menuCard: {
-    marginTop: 16,
+    marginTop: 22,
   },
   menuRow: {
     marginTop: 14,

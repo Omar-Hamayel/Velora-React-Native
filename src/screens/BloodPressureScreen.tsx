@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
   },
   loadingIndicator: { marginTop: 30 },
   emptyWrap: { alignItems: "center", justifyContent: "center", marginTop: 50, gap: 10 },
-  emptyText: { fontSize: 13, color: COLORS.gray, textAlign: "center" },
+  emptyText: { width: "100%", fontSize: 13, color: COLORS.gray, textAlign: "center" },
   recordCard: {
     backgroundColor: COLORS.white,
     borderRadius: 18,

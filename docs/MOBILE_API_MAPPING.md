@@ -30,3 +30,7 @@ All routes below were read from the existing controllers/DTOs; mobile calls the 
 Private FastAPI routes remain GET /health, POST /recommendations. They are configured only in ASP.NET AiSettings, not in mobile. No profile names/email/token/password are sent to Python.
 
 Client failures:0network;400/422validation;401clear session/relogin;403permission/profile gate;404missing;408/504timeout;500generic;503unavailable. User-visible text is localized and sanitized. The old registration behavior treating500 as successful account creation was removed; only successful responses advance. Mobile request timeout25s, no implicit write retries. Server AI failure states remain retryable without undoing the saved profile.
+
+## Daily plan — 3 November 2026
+
+Home now reads GET `/api/AI/recommendations/today` for metadata/current tasks/completedToday, and the existing GET `/api/AI/recommendations/my?skip=0&take=50` for paged history. Opening/foreground/day rollover explicitly POST `/api/AI/recommendations/ensure?timeZoneId=<device zone>` when needed; Refresh remains GET-only. Existing generate is explicit retry; existing feedback PATCH persists completion/undo and preferences. Never supply UserId from mobile. Deploy the matching backend/Python and additive migration before this mobile change.

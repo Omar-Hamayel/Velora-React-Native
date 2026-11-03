@@ -14,6 +14,7 @@ export class ApiError extends Error {
 }
 
 let authToken: string | null = null;
+let rememberSession = false;
 
 export function setAuthToken(token: string | null): void {
   authToken = token;
@@ -43,13 +44,14 @@ export function getCurrentUser(): CurrentUser | null {
 
 const SESSION_STORAGE_KEY = "velora_session";
 
-type StoredSession = { token: string; user: CurrentUser };
+type StoredSession = { token: string; user: CurrentUser; rememberMe?: boolean };
 
 async function saveSession(): Promise<void> {
   if (!authToken || !currentUser) return;
-  const session: StoredSession = { token: authToken, user: currentUser };
+  const session: StoredSession = { token: authToken, user: currentUser, rememberMe: true };
   try {
-    await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    if (rememberSession) await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    else await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
   } catch {
   }
 }
@@ -59,9 +61,10 @@ export async function loadPersistedSession(): Promise<boolean> {
     const raw = await AsyncStorage.getItem(SESSION_STORAGE_KEY);
     if (!raw) return false;
     const session = JSON.parse(raw) as StoredSession;
-    if (!session.token || !session.user) return false;
+    if (!session.token || !session.user || session.rememberMe === false) return false;
     authToken = session.token;
     currentUser = session.user;
+    rememberSession = true;
     return true;
   } catch {
     return false;
@@ -71,6 +74,7 @@ export async function loadPersistedSession(): Promise<boolean> {
 export async function clearSession(): Promise<void> {
   authToken = null;
   currentUser = null;
+  rememberSession = false;
   try {
     await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
   } catch {
@@ -93,6 +97,7 @@ export function errorKey(status: number): string {
   if (status === 400 || status === 422) return "errors.validation";
   if (status === 408 || status === 504) return "errors.timeout";
   if (status === 503) return "errors.unavailable";
+  if (status === 502 || status === 530) return "errors.gateway";
   return "errors.server";
 }
 
@@ -185,12 +190,13 @@ export function mapNextStepToUiStep(nextStep: string | null | undefined): 1 | 2 
   return nextStep === "Diseases" ? 3 : nextStep === "Lifestyle" ? 2 : 1;
 }
 
-export async function login(payload: LoginRequest): Promise<LoginResponse> {
+export async function login(payload: LoginRequest, options: { rememberMe?: boolean } = {}): Promise<LoginResponse> {
   const result = await request<LoginResponse>("/api/Identity/Auth/login", {
     method: "POST",
     body: JSON.stringify(payload),
   });
   setAuthToken(result.token);
+  rememberSession = options.rememberMe ?? true;
   const previous = currentUser?.email === result.email ? currentUser : null;
   setCurrentUser({
     ...previous,
@@ -298,6 +304,25 @@ export function updateUserHealthProfile(id: number, payload: BodyInfoRequest): P
 }
 
 export type DiseaseType = "type_2_diabetes" | "hypertension" | "hypercholesterolemia" | "insulin_resistance";
+export const SUPPORTED_CONDITIONS: { code: DiseaseType; label: string }[] = [
+  {code:"type_2_diabetes",label:"screens.HealthInfo.type2Diabetes"},
+  {code:"hypertension",label:"screens.HealthInfo.hypertension"},
+  {code:"hypercholesterolemia",label:"screens.HealthInfo.hypercholesterolemia"},
+  {code:"insulin_resistance",label:"screens.HealthInfo.insulinResistance"},
+];
+export type UserDiseaseRecord = {
+  id: number; diseaseId: number; conditionCode: string | null; diseaseName: string;
+  diagnosisDate: string | null; isDiagnosed: boolean; notes: string | null;
+};
+export function getUserDiseases(): Promise<UserDiseaseRecord[]> { return request("/api/User/UserDisease"); }
+export async function addUserDisease(code: DiseaseType, diagnosisDate?: string): Promise<UserDiseaseRecord> {
+  const [diseaseId] = await resolveDiseaseIds([code]);
+  return request("/api/User/UserDisease", {method:"POST",body:JSON.stringify({diseaseId,isDiagnosed:true,diagnosisDate:diagnosisDate ?? null})});
+}
+export function updateUserDisease(record: UserDiseaseRecord, diagnosisDate?: string): Promise<UserDiseaseRecord> {
+  return request(`/api/User/UserDisease/${record.id}`, {method:"PUT",body:JSON.stringify({diagnosisDate:diagnosisDate ?? null,isDiagnosed:record.isDiagnosed,notes:record.notes})});
+}
+export function removeUserDisease(id: number): Promise<void> { return request(`/api/User/UserDisease/${id}`, {method:"DELETE"}); }
 export type DiseaseRecord = { id: number; code: string | null; name: string; description?: string };
 export function getDiseaseCatalog(): Promise<DiseaseRecord[]> { return request("/api/Admin/Disease"); }
 export async function resolveDiseaseIds(codes: DiseaseType[]): Promise<number[]> {
@@ -356,7 +381,29 @@ export type RecommendationRecord = {
   id: number; recommendationCatalogId: string | null; title: string; description: string; category: string | null;
   reasonCodes: string[]; explanation: string | null; safetyStatus: string | null; score: number | null;
   feedback: "liked" | "disliked" | null; isCompleted: boolean; generationId: string;
+  generatedAt?: string; completedAt?: string | null; recurrence?: "daily" | "weekly";
 };
+export type RecommendationPlan = {
+  planDate: string; timeZoneId: string; isStale: boolean; isProfileComplete: boolean;
+  status: "Pending" | "Generated" | "Failed" | null; generatedAt: string | null; nextRefreshAt: string;
+  failureCode?: string | null; generationId?: string | null;
+  retryAfterSeconds: number; recommendations: RecommendationRecord[]; completedToday: RecommendationRecord[];
+};
+export async function getTodayPlan(): Promise<RecommendationPlan> {
+  try { return await request("/api/AI/recommendations/today"); }
+  catch (error) {
+    if (error instanceof ApiError && error.status === 404) throw new ApiError(translate("recommendationUi.serverUpdate"), 404);
+    throw error;
+  }
+}
+export function recommendationTimeZone(): string { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; }
+export function ensureDailyPlan(): Promise<GenerationState> {
+  const zone = recommendationTimeZone();
+  return request(`/api/AI/recommendations/ensure?timeZoneId=${encodeURIComponent(zone)}`, {method: "POST"});
+}
+export function getRecommendationHistory(skip = 0): Promise<RecommendationRecord[]> {
+  return request(`/api/AI/recommendations/my?skip=${skip}&take=50`);
+}
 export type GenerationState = {status: "Pending" | "Generated" | "Failed"; message: string};
 export function getRecommendations(): Promise<RecommendationRecord[]> { return request("/api/AI/recommendations/latest"); }
 export async function getGenerationStatus(): Promise<GenerationState | null> {

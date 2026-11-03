@@ -3,6 +3,7 @@ import { ActivityIndicator, Keyboard, Modal, Platform, Pressable, StyleSheet, Vi
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { Text } from "./LocalizedText";
+import LocalizedView from "./LocalizedView";
 import { nativeRestartRequired, restartForDirection, selectLanguage } from "../localization/runtime";
 import { translate, type Language } from "../localization/core";
 
@@ -48,7 +49,7 @@ export default function LanguageSelector({ compact = false }: { compact?: boolea
       </Pressable>
 
       <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
-        <View style={[styles.modalRoot, { direction: rtl ? "rtl" : "ltr" }]}>
+        <LocalizedView testID="language-dialog-layout" style={styles.modalRoot}>
           <Pressable style={styles.backdrop} accessibilityRole="button" accessibilityLabel={translate("common.cancel")} onPress={() => setOpen(false)} />
           <View style={styles.dialog} accessibilityViewIsModal>
             <View style={styles.dialogHeader}>
@@ -78,7 +79,7 @@ export default function LanguageSelector({ compact = false }: { compact?: boolea
             {error && <Text accessibilityRole="alert" style={styles.message}>{translate("settings.syncFailed")}</Text>}
             {Platform.OS !== "web" && nativeRestartRequired && <Pressable onPress={() => void restartForDirection()} style={styles.restartButton}><Text style={styles.restartText}>{translate("settings.restart")}</Text></Pressable>}
           </View>
-        </View>
+        </LocalizedView>
       </Modal>
     </View>
   );

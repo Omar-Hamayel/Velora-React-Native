@@ -1,5 +1,6 @@
 import { I18nextProvider, useTranslation } from "react-i18next";
-import { i18n, direction } from "./src/localization/core";
+import { i18n } from "./src/localization/core";
+import LocalizedView from "./src/components/LocalizedView";
 import { initializeLocalization, synchronizeLanguage } from "./src/localization/runtime";
 import { getOnboardingStatus } from "./src/api/authApi";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -72,7 +73,7 @@ const SWIPE_DIRECTION_TOLERANCE = 60;
 
 export default function App() { return <I18nextProvider i18n={i18n}><AppContent /></I18nextProvider>; }
 function AppContent() {
-  const { i18n: locale } = useTranslation();
+  useTranslation();
   const [initialized, setInitialized] = useState(false);
   const [splashMounted, setSplashMounted] = useState(true);
   const splashOpacity = useRef(new Animated.Value(1)).current;
@@ -239,7 +240,7 @@ function AppContent() {
 
   if (!initialized) return <View style={styles.container} />;
   return (
-    <View style={[styles.container, {direction: direction(locale.language)}]} {...panResponder.panHandlers}>
+    <LocalizedView testID="app-layout" style={styles.container} {...panResponder.panHandlers}>
       <Animated.View style={[styles.layer, { opacity: contentOpacity }]}>
         {screen === "onboarding" && <OnboardingScreen onGetStarted={handleGetStarted} />}
         {screen === "welcome" && (
@@ -298,6 +299,7 @@ function AppContent() {
 
       {splashMounted && (
         <Animated.View
+          testID="launch-splash"
           style={[styles.layer, { opacity: splashOpacity, pointerEvents: "none" }]}
         >
           <SplashVideoScreen onFinish={handleSplashFinish} />
@@ -318,7 +320,7 @@ function AppContent() {
           ]}
         />
       )}
-    </View>
+    </LocalizedView>
   );
 }
 

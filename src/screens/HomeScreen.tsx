@@ -1,4 +1,6 @@
 import { translate, i18n } from "../localization/core";
+import { useTranslation } from "react-i18next";
+import LocalizedView from "../components/LocalizedView";
 import RecommendationList from "../components/RecommendationList";
 import React, { useState } from "react";
 import {
@@ -78,6 +80,8 @@ export default function HomeScreen({
   onGoToBloodPressure?: (origin: ScreenPoint) => void;
   onGoToMedication?: (origin: ScreenPoint) => void;
 }) {
+  useTranslation();
+  const rtl = i18n.language === "ar";
   const userName = getCurrentUser()?.fullName || "there";
   return (
     <View style={styles.outer}>
@@ -94,8 +98,8 @@ export default function HomeScreen({
             end={{ x: 1, y: 1 }}
             style={styles.header}
           >
-            <View style={styles.headerRow}>
-              <View style={styles.headerLeft}>
+            <LocalizedView layoutDirection={rtl ? "ltr" : undefined} style={[styles.headerRow, rtl && styles.arabicHeaderRow]}>
+              <LocalizedView layoutDirection={rtl ? "ltr" : undefined} style={styles.headerLeft}>
                 <View style={styles.avatar}>
                   <Ionicons name="person" size={22} color={COLORS.teal} />
                 </View>
@@ -103,12 +107,12 @@ export default function HomeScreen({
                   <Text style={styles.greeting}>{translate("screens.Home.welcomeBack")}</Text>
                   <Text style={styles.userName}>{userName}</Text>
                 </View>
-              </View>
+              </LocalizedView>
 
               <View style={styles.notificationButton}>
                 <Ionicons name="notifications-outline" size={20} color={COLORS.white} />
               </View>
-            </View>
+            </LocalizedView>
           </LinearGradient>
 
           <View style={styles.body}>
@@ -121,8 +125,10 @@ export default function HomeScreen({
                 <TouchableOpacity
                   key={tile.key}
                   activeOpacity={0.85}
+                  {...(Platform.OS === "web" ? {dir:"ltr" as const} : {})}
                   style={[
                     styles.recordRow,
+                    Platform.OS !== "web" && {direction:"ltr"},
                     index === RECORD_TILES.length - 1 && styles.recordRowLast,
                   ]}
                   onPress={(e) => {
@@ -135,8 +141,9 @@ export default function HomeScreen({
                   <View style={[styles.recordIconBadge, { backgroundColor: tile.iconBackground }]}>
                     <Ionicons name={tile.icon} size={18} color={tile.iconColor} />
                   </View>
+                  {rtl && <Ionicons name="chevron-back" size={18} color={COLORS.grayLight} />}
                   <Text style={styles.recordLabel}>{translate(tile.label)}</Text>
-                  <Ionicons name={i18n.language === "ar" ? "chevron-back" : "chevron-forward"} size={18} color={COLORS.grayLight} />
+                  {!rtl && <Ionicons name="chevron-forward" size={18} color={COLORS.grayLight} />}
                 </TouchableOpacity>
               ))}
             </View>
@@ -226,6 +233,7 @@ const styles = StyleSheet.create({
   },
   body: {
     paddingHorizontal: 20,
+    paddingTop: 22,
   },
   card: {
     backgroundColor: COLORS.white,
@@ -427,6 +435,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
+  arabicHeaderRow: { flexDirection: "row-reverse" },
   recordRowLast: {
     borderBottomWidth: 0,
   },

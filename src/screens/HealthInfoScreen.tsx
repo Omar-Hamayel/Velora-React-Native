@@ -722,6 +722,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   title: {
+    width: "100%",
     marginTop: 10,
     fontSize: 19,
     fontWeight: "700",
@@ -729,6 +730,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   subtitle: {
+    width: "100%",
     marginTop: 4,
     fontSize: 12.5,
     color: COLORS.gray,
@@ -753,7 +755,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   label: {
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
     marginTop: 18,
     fontSize: 12.5,
     fontWeight: "600",
@@ -783,7 +785,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   errorText: {
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
     marginTop: 5,
     fontSize: 11.5,
     color: COLORS.error,
@@ -874,8 +876,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 12.5,
     color: COLORS.gray,
-    textAlign: "left",
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
   },
   familyRow: {
     marginTop: 14,

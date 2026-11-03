@@ -37,11 +37,11 @@ export default function WelcomeScreen({
     nextStep?: string | null
   ) => void;
 }) {
-  const { i18n } = useTranslation();
-  const rtl = i18n.language === "ar";
+  useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isForgotLoading, setIsForgotLoading] = useState(false);
   const [isResendLoading, setIsResendLoading] = useState(false);
@@ -113,7 +113,7 @@ export default function WelcomeScreen({
     setIsLoading(true);
     setShowResendLink(false);
     try {
-      const result = await login({ email: email.trim(), password });
+      const result = await login({ email: email.trim(), password }, { rememberMe });
       continueRef.current?.measureInWindow((x, y, w, h) => {
         const origin = { x: x + w / 2, y: y + h / 2 };
         onLoginSuccess?.(origin, result.requiresProfileCompletion, result.nextStep);
@@ -178,7 +178,7 @@ export default function WelcomeScreen({
           <View style={styles.inputRow}>
             <Ionicons name="mail-outline" size={18} color="#80938F" />
             <TextInput
-              style={[styles.input, rtl && !email && styles.emptyInputRTL]}
+              style={styles.input}
               placeholder={translate("screens.Welcome.enterEmailOrPhoneNumber")}
               placeholderTextColor={COLORS.gray}
               autoCapitalize="none"
@@ -193,7 +193,8 @@ export default function WelcomeScreen({
           <View style={styles.inputRow}>
             <Ionicons name="lock-closed-outline" size={18} color="#80938F" />
             <TextInput
-              style={[styles.input, { writingDirection: rtl && !password ? "rtl" : "ltr", textAlign: rtl && !password ? "right" : "left" }]}
+              style={styles.input}
+              contentDirection="ltr"
               placeholder={translate("screens.Welcome.enterYourPassword")}
               placeholderTextColor={COLORS.gray}
               secureTextEntry={!showPassword}
@@ -219,6 +220,16 @@ export default function WelcomeScreen({
 
           <ErrorBanner message={errorMessage} onDismiss={() => setErrorMessage(null)} />
           <ErrorBanner message={successMessage} tone="success" onDismiss={() => setSuccessMessage(null)} />
+
+          <TouchableOpacity accessibilityRole="checkbox" accessibilityLabel={translate("accountUi.rememberMe")}
+            accessibilityState={{checked:rememberMe}} aria-checked={rememberMe} onPress={() => setRememberMe(value => !value)}
+            style={styles.rememberRow} disabled={isLoading} activeOpacity={0.7}>
+            <Ionicons testID="remember-mark" name={rememberMe ? "checkbox" : "square-outline"} size={23} color={COLORS.teal} />
+            <View testID="remember-copy" style={styles.rememberCopy}>
+              <Text style={styles.rememberLabel}>{translate("accountUi.rememberMe")}</Text>
+              <Text style={styles.rememberHint}>{translate("accountUi.rememberHint")}</Text>
+            </View>
+          </TouchableOpacity>
 
           <View
             style={[
@@ -297,6 +308,10 @@ export default function WelcomeScreen({
 }
 
 const styles = StyleSheet.create({
+  rememberRow: {flexDirection:"row",alignItems:"center",gap:10,marginTop:18,paddingVertical:6},
+  rememberCopy: {flex:1,minWidth:0,alignItems:"stretch"},
+  rememberLabel: {width:"100%",fontSize:13,fontWeight:"600",color:COLORS.black},
+  rememberHint: {width:"100%",fontSize:11.5,color:COLORS.gray,marginTop:3,lineHeight:18},
   outer: {
     flex: 1,
     backgroundColor: COLORS.white,
@@ -374,10 +389,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: COLORS.black,
     height: "100%",
-  },
-  emptyInputRTL: {
-    writingDirection: "rtl",
-    textAlign: "right",
   },
   eyeButton: {
     width: 28,

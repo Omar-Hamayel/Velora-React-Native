@@ -1,5 +1,5 @@
 import type { ViewInstance } from "react-native";
-import { translate, i18n, normalizeDigits } from "../localization/core";
+import { translate, i18n } from "../localization/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert, Animated, Dimensions, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import LoadingVideoOverlay from "../components/LoadingVideoOverlay";
 import AnimatedLogo from "../components/AnimatedLogo";
 import ErrorBanner from "../components/ErrorBanner";
+import DateInput from "../components/DateInput";
 import type { ScreenPoint } from "./OnboardingScreen";
 import { ApiError, register, resendConfirmationEmail } from "../api/authApi";
 
@@ -297,6 +298,7 @@ export default function SignUpScreen({
                       placeholderTextColor={COLORS.gray}
                       autoCapitalize="none"
                       secureTextEntry={!showPassword}
+                      contentDirection="ltr"
                       value={password}
                       onChangeText={(text) => {
                         setPassword(text);
@@ -334,6 +336,7 @@ export default function SignUpScreen({
                       placeholderTextColor={COLORS.gray}
                       autoCapitalize="none"
                       secureTextEntry={!showConfirmPassword}
+                      contentDirection="ltr"
                       value={confirmPassword}
                       onChangeText={(text) => {
                         setConfirmPassword(text);
@@ -401,34 +404,12 @@ export default function SignUpScreen({
                     <Text style={styles.errorText}>{translate("screens.SignUp.pleaseSelectAGender")}</Text>
                   )}
 
-                  <Text style={[styles.label, styles.labelTight]}>{translate("screens.SignUp.dateOfBirth")}</Text>
-                  <View
-                    style={[styles.inputRow, touched.dob && !dobValid && styles.inputRowError]}
-                  >
-                    <TextInput
-                      style={styles.input}
-                      placeholder={translate("screens.SignUp.ddMmYyyy")}
-                      placeholderTextColor={COLORS.gray}
-                      keyboardType="number-pad"
-                      maxLength={10}
-                      value={dob}
-                      onChangeText={(text) => {
-                        const digits = normalizeDigits(text).replace(/\D/g, "").slice(0, 8);
-                        let formatted = digits;
-                        if (digits.length > 4) {
-                          formatted = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
-                        } else if (digits.length > 2) {
-                          formatted = `${digits.slice(0, 2)}/${digits.slice(2)}`;
-                        }
-                        setDob(formatted);
-                        markTouched("dob");
-                      }}
-                    />
-                    <Ionicons name="calendar-outline" size={18} color={COLORS.gray} />
-                  </View>
-                  {touched.dob && !dobValid && (
-                    <Text style={styles.errorText}>{translate("screens.SignUp.enterAValidDateDdMmYyyyYouMustBeAtLeast13")}</Text>
-                  )}
+                  <DateInput label={translate("screens.SignUp.dateOfBirth")} value={dob}
+                    onChangeText={(value) => {setDob(value);markTouched("dob");}}
+                    invalid={touched.dob && !dobValid}
+                    maximumDate={new Date(new Date().getFullYear()-13,new Date().getMonth(),new Date().getDate())}
+                    initialDate={new Date(new Date().getFullYear()-25,0,1)}
+                    errorMessage={translate("screens.SignUp.enterAValidDateDdMmYyyyYouMustBeAtLeast13")} />
 
                   <View style={styles.buttonRow}>
                     <TouchableOpacity
@@ -545,6 +526,8 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   title: {
+    width: "100%",
+    textAlign: "center",
     marginTop: 10,
     fontSize: 19,
     fontWeight: "700",
@@ -569,7 +552,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   label: {
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
     marginTop: 20,
     fontSize: 12.5,
     fontWeight: "600",
@@ -599,7 +582,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   errorText: {
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
     marginTop: 5,
     fontSize: 11.5,
     color: COLORS.error,
@@ -700,12 +683,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   confirmTitle: {
+    width: "100%",
+    textAlign: "center",
     marginTop: 16,
     fontSize: 17,
     fontWeight: "700",
     color: COLORS.black,
   },
   confirmSubtitle: {
+    width: "100%",
     marginTop: 8,
     fontSize: 13,
     lineHeight: 19,
@@ -725,6 +711,8 @@ const styles = StyleSheet.create({
     color: COLORS.teal,
   },
   resendHint: {
+    width: "100%",
+    textAlign: "center",
     marginTop: 18,
     fontSize: 12,
     color: COLORS.gray,

@@ -2,8 +2,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeI18n, i18n, resources, deviceLanguage, direction, medicalNumber, normalizeDigits, recommendationText, reasonText, localizedReasons } from "../src/localization/core";
 import { LanguagePreferences, LANGUAGE_KEY } from "../src/localization/preferences";
 import { resolveApiBaseUrl } from "../src/api/config";
+import { localizedTextLayout } from "../src/localization/layout";
 
 beforeEach(async () => { await i18n.changeLanguage("en"); });
+it("uses logical start on native to avoid iOS mirroring right alignment back to the left", () => {
+  expect(localizedTextLayout(true, false)).toEqual({direction:"rtl",textAlign:"start"});
+  expect(localizedTextLayout(true, true)).toEqual({textAlign:"right"});
+  expect(localizedTextLayout(false, false)).toEqual({direction:"ltr",textAlign:"start"});
+});
 describe("presentation resources", () => {
   it("initializes both languages with English fallback and no null values", () => {
     const ar = makeI18n("ar");
@@ -22,9 +28,9 @@ describe("presentation resources", () => {
       expect(makeI18n("ar").exists(`recommendations.${id}.${field}`,{fallbackLng:false})).toBe(true);
     }
   });
-  it("localizes all 30 unchanged reason codes without exposing unknown codes", async () => {
+  it("localizes current and historical reason codes without exposing unknown codes", async () => {
     const codes = Object.keys(resources.en.translation.reasonCodes);
-    expect(codes).toHaveLength(30);
+    expect(codes).toHaveLength(31);
     expect(Object.keys(resources.ar.translation.reasonCodes).sort()).toEqual(codes.sort());
     await i18n.changeLanguage("ar");
     for (const code of codes) expect(reasonText(code)).toMatch(/[\u0600-\u06ff]/);

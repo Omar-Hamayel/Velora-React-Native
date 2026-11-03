@@ -228,7 +228,8 @@
     "UNSAFE_FOR_HYPERCHOLESTEROLEMIA": "Excluded by the current safety rules for a selected condition.",
     "UNSAFE_FOR_HYPERTENSION": "Excluded by the current safety rules for a selected condition.",
     "UNSAFE_FOR_INSULIN_RESISTANCE": "Excluded by the current safety rules for a selected condition.",
-    "UNSAFE_FOR_TYPE_2_DIABETES": "Excluded by the current safety rules for a selected condition."
+    "UNSAFE_FOR_TYPE_2_DIABETES": "Excluded by the current safety rules for a selected condition.",
+    "LIKED_RECOMMENDATION_BONUS": "Your previous like influenced the ranking."
   },
   "screens": {
     "BloodPressure": {
@@ -524,6 +525,7 @@
     }
   },
   "errors": {
+    "gateway": "The service cannot currently be reached through its public address. Please try again later.",
     "network": "Cannot reach the server. Check your connection.",
     "session": "Session expired. Please log in again.",
     "forbidden": "Complete your profile or sign in with an authorized account.",
@@ -538,10 +540,49 @@
   },
   "recommendationUi": {
     "pending": "Recommendations are being prepared.",
-    "unavailable": "Your profile was saved. Recommendations could not be generated; you can retry.",
-    "empty": "No recommendations yet. Complete your profile or refresh later.",
+    "unavailable": "Your recommendations are not ready. You can try again.",
+    "empty": "No eligible tasks in this plan. Check completed tasks or history.",
     "caution": "Use caution with this activity; choose a gentler option if needed.",
-    "englishFallback": "Additional explanation (English)"
+    "englishFallback": "Additional explanation (English)",
+    "tab_today": "Remaining today",
+    "tab_completed": "Completed today",
+    "tab_history": "History",
+    "planDate": "Plan: {{date}} · {{zone}}",
+    "lastUpdated": "Last updated: {{date}}",
+    "refreshHint": "Refresh checks your saved plan. A new plan is prepared the next day or when your health data changes.",
+    "stale": "Your previous plan is out of date. It is hidden until the updated plan is ready.",
+    "incomplete": "Complete your supported health profile before preparing a plan.",
+    "undo": "Undo completion",
+    "undoDislike": "Remove dislike",
+    "hiddenNotice": "Hidden from remaining tasks. You can remove the dislike in History.",
+    "noHistory": "No recommendation history yet.",
+    "noCompleted": "No tasks completed today yet.",
+    "allDone": "You have completed your available tasks for today. Your next plan will be prepared tomorrow.",
+    "retryAfter": "Retry available in {{seconds}} seconds.",
+    "more": "Load older recommendations",
+    "daily": "Repeatable suggestion · completion applies to this day",
+    "weekly": "Weekly planning task",
+    "historyHint": "Past snapshots are kept for your records and may no longer match your current health profile.",
+    "serverUpdate": "The daily plan could not be loaded. Make sure the backend includes the daily-plan update and sign in again if needed.",
+    "incompleteTitle": "Complete your health profile",
+    "failedTitle": "Your recommendations could not be prepared",
+    "pendingBody": "We are preparing today’s plan from your latest data. It will appear here when ready.",
+    "planDetails": "About your plan",
+    "reference": "Attempt reference: {{id}}",
+    "showReasons": "Why this suggestion?",
+    "hideReasons": "Hide explanation",
+    "failures": {
+      "generation_failed": "The generation attempt did not finish. Please try again shortly.",
+      "ai_unreachable": "The server could not connect to the recommendation service. Try again shortly.",
+      "ai_timeout": "The recommendation service took too long to respond. Please try again.",
+      "ai_unavailable": "The recommendation service is temporarily unavailable. Try again shortly.",
+      "ai_request_rejected": "Your profile could not be processed. The recommendation connection needs review.",
+      "ai_authentication": "The server could not authenticate with the recommendation service. Service settings need review.",
+      "ai_configuration": "The recommendation connection needs a configuration review on the server.",
+      "ai_invalid_response": "The received recommendations could not be validated. Try again shortly.",
+      "profile_changed": "Your data changed while preparing the plan. Retry to use your latest data.",
+      "persistence_failed": "The recommendations could not be saved. Try again shortly."
+    }
   },
   "feedback": {
     "like": "Like",
@@ -563,6 +604,42 @@
     "ModeratelyActive": "Moderately active",
     "VeryActive": "Very active",
     "ExtraActive": "Extra active"
+  },
+  "accountUi": {
+    "rememberMe": "Remember me",
+    "rememberHint": "Stay signed in on this device. Your password is never saved."
+  },
+  "dateUi": {
+    "open": "Choose date: {{field}}",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "chooseMonth": "Choose month",
+    "chooseYear": "Choose year",
+    "chooseDay": "Select date"
+  },
+  "conditionsUi": {
+    "title": "My health conditions",
+    "hint": "Your saved conditions are marked. You can add another supported condition below.",
+    "none": "No conditions added to your profile yet.",
+    "recorded": "Saved to my profile",
+    "unconfirmed": "Recorded, not marked as diagnosed",
+    "notRecorded": "Not added",
+    "add": "Add",
+    "edit": "Edit",
+    "addLabel": "Add {{condition}}",
+    "editLabel": "Edit {{condition}}",
+    "removeLabel": "Remove {{condition}}",
+    "refresh": "Refresh my conditions",
+    "diagnosedHint": "Add only conditions you have already been diagnosed with.",
+    "diagnosisDate": "Diagnosis date (optional)",
+    "save": "Save condition",
+    "saved": "Your condition was saved. Recommendation updates depend on service availability.",
+    "removed": "The condition was removed from your profile.",
+    "legacyTitle": "Older entries to review",
+    "legacyHint": "Review these entries and record the exact condition when confirmed. They have not been changed automatically.",
+    "removeTitle": "Remove this condition?",
+    "removePrompt": "Remove {{condition}} from your profile? Future recommendation updates will use the remaining conditions.",
+    "confirmRemove": "Remove condition"
   },
   "validation": {
     "range": "Enter a value between {{min}} and {{max}} {{unit}}."
